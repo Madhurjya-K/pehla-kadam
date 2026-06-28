@@ -57,8 +57,6 @@ This repository contains the main prototype file: `index.html`
 - Expanded Phase 2 engagement features
 
 ## Files
-- `index.html` – main demo prototype
+- `pehla-kadam-1` – main demo prototype
 - `README.md` – project summary
 
-## Note
-This is an ideation-stage prototype created for hackathon submission.
