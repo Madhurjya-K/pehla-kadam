@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>YONO SBI — PEHLA KADAM 2.0</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.2.0/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.2.0/umd/react-dom.production.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --blue:#003087;--cyan:#0077b6;--light:#00b4d8;--deep:#001a4d;
+  --ok:#00875A;--warn:#F5A623;--err:#ff4d6d;--ok2:#00d4a0;
+  --glass:rgba(255,255,255,0.07);--gb:rgba(255,255,255,0.13);
+  --ts:rgba(255,255,255,0.65);--tm:rgba(255,255,255,0.38);
+}
+html,body,#root{height:100%;font-family:'Inter',sans-serif;background:#000;}
+body{overflow-x:hidden;}
+.app{display:flex;flex-direction:column;height:100%;max-width:430px;margin:0 auto;background:#000;overflow:hidden;}
+.screen{flex:1;overflow-y:auto;overflow-x:hidden;position:relative;}
+.screen::-webkit-scrollbar{display:none;}
+*{scrollbar-width:none;}
+.bg-lang{background:radial-gradient(ellipse at 50% -10%,#0077b6 0%,#001a4d 40%,#000 80%);}
+.bg-login{background:radial-gradient(ellipse at 50% 0%,#003087 0%,#000 70%);}
+.bg-dash{background:linear-gradient(180deg,#001a4d 0%,#000 35%);}
+.bg-dark{background:#050a14;}
+.bg-nova{background:radial-gradient(ellipse at 60% 20%,#001a4d 0%,#000 65%);}
+.bg-welcome{background:linear-gradient(160deg,#003087 0%,#0077b6 40%,#001a4d 100%);}
+.bg-success{background:radial-gradient(ellipse at 50% 30%,#00875A 0%,#003087 50%,#000 100%);}
+.bg-growth{background:linear-gradient(180deg,#0a1628 0%,#050a14 100%);}
+@keyframes morph{0%,100%{border-radius:60% 40% 50% 70%/50% 60% 40% 60%;}25%{border-radius:40% 60% 70% 30%/60% 40% 50% 70%;}50%{border-radius:70% 30% 40% 60%/30% 70% 60% 40%;}75%{border-radius:30% 70% 60% 40%/70% 30% 40% 60%;}}
+@keyframes pulse2{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.4;transform:scale(1.5);}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes typing{0%,100%{transform:translateY(0);opacity:.4;}50%{transform:translateY(-6px);opacity:1;}}
+@keyframes progress{from{width:0%;}to{width:var(--pw,70%);}}
+@keyframes glow{0%,100%{box-shadow:0 0 20px rgba(0,180,216,.3);}50%{box-shadow:0 0 40px rgba(0,180,216,.6);}}
+@keyframes pop{0%{transform:scale(0);}70%{transform:scale(1.15);}100%{transform:scale(1);}}
+@keyframes shine{0%{left:-100%;}100%{left:200%;}}
+.su{animation:slideUp .38s ease forwards;}
+.fi{animation:fadeIn .3s ease forwards;}
+.yono-logo{font-size:42px;font-weight:900;color:#fff;letter-spacing:2px;text-align:center;}
+.lang-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;}
+.lang-btn{background:linear-gradient(135deg,rgba(0,119,182,.4),rgba(0,180,216,.2));border:1px solid var(--gb);border-radius:50px;padding:13px;color:#fff;font-size:11px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase;cursor:pointer;transition:all .2s;text-align:center;}
+.lang-btn.sel,.lang-btn:hover{background:linear-gradient(135deg,#0077b6,#00b4d8);border-color:#00b4d8;}
+.svc-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;}
+.svc-card{background:rgba(0,119,182,.18);border:1px solid var(--gb);border-radius:12px;padding:11px;}
+.svc-card h4{font-size:9px;font-weight:700;color:#00b4d8;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.svc-li{list-style:none;font-size:9px;color:var(--ts);padding:2px 0 2px 10px;position:relative;}
+.svc-li::before{content:"•";color:#00b4d8;position:absolute;left:0;}
+.btn-main{width:100%;background:linear-gradient(90deg,#0077b6,#00b4d8);border:none;border-radius:50px;padding:16px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;transition:all .2s;letter-spacing:.3px;position:relative;overflow:hidden;}
+.btn-main::after{content:'';position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.15),transparent);animation:shine 2.5s infinite;}
+.btn-main:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(0,119,182,.4);}
+.btn-ghost{background:rgba(255,255,255,.07);color:rgba(255,255,255,.7);border:1px solid var(--gb);}
+.btn-ghost::after{display:none;}
+.btn-ghost:hover{background:rgba(255,255,255,.12);}
+.btn-danger{background:rgba(255,77,109,.15);color:#ff4d6d;border:1px solid rgba(255,77,109,.3);}
+.btn-danger::after{display:none;}
+.btn-success{background:linear-gradient(90deg,#00875A,#00d4a0);}
+.btn-success::after{display:none;}
+.login-wrap{padding:60px 28px 40px;}
+.card{background:rgba(255,255,255,.05);border:1px solid var(--gb);border-radius:22px;padding:26px;backdrop-filter:blur(20px);}
+.card h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;}
+.card p{font-size:13px;color:var(--ts);margin-bottom:20px;}
+.ig{margin-bottom:14px;}
+.ig label{display:block;font-size:10px;color:var(--tm);letter-spacing:.5px;text-transform:uppercase;margin-bottom:5px;}
+.ig input{width:100%;background:rgba(255,255,255,.07);border:1px solid var(--gb);border-radius:11px;padding:13px 15px;color:#fff;font-size:15px;outline:none;font-family:'Inter',sans-serif;transition:border-color .2s;}
+.ig input:focus{border-color:#00b4d8;}
+.ig input::placeholder{color:var(--tm);}
+.bio-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0;}
+.bio-btn{background:rgba(255,255,255,.05);border:1px solid var(--gb);border-radius:12px;padding:12px;color:var(--ts);font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;transition:all .2s;}
+.bio-btn:hover{background:rgba(255,255,255,.1);color:#fff;}
+.otp-row{display:flex;gap:8px;margin-top:8px;}
+.otp-inp{flex:1;background:rgba(255,255,255,.07);border:1px solid var(--gb);border-radius:11px;padding:13px 4px;color:#fff;font-size:18px;font-weight:700;text-align:center;outline:none;transition:all .2s;}
+.otp-inp:focus{border-color:#00b4d8;}
+.topnav{display:flex;align-items:center;justify-content:space-between;padding:52px 20px 14px;}
+.user-greet{font-size:12px;color:var(--ts);}
+.user-name{font-size:20px;font-weight:700;color:#fff;margin-top:2px;}
+.nav-right{display:flex;align-items:center;gap:10px;}
+.notif-btn{background:rgba(255,255,255,.08);border:1px solid var(--gb);border-radius:50%;width:40px;height:40px;display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;font-size:18px;}
+.ndot{position:absolute;top:7px;right:7px;width:9px;height:9px;background:var(--err);border-radius:50%;border:1.5px solid #000;}
+.avatar{width:40px;height:40px;background:linear-gradient(135deg,#0077b6,#00b4d8);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;cursor:pointer;}
+.bal-card{margin:0 16px;background:linear-gradient(135deg,rgba(0,48,135,.9),rgba(0,119,182,.65));border:1px solid rgba(0,180,216,.3);border-radius:22px;padding:22px;position:relative;overflow:hidden;animation:glow 4s ease-in-out infinite;}
+.bal-card::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(0,180,216,.2),transparent 70%);border-radius:50%;}
+.bal-label{font-size:11px;color:rgba(255,255,255,.55);letter-spacing:.5px;text-transform:uppercase;position:relative;z-index:1;}
+.bal-amount{font-size:36px;font-weight:800;color:#fff;margin:6px 0 5px;position:relative;z-index:1;letter-spacing:-1px;}
+.bal-meta{font-size:11px;color:rgba(255,255,255,.45);position:relative;z-index:1;}
+.bal-actions{display:flex;gap:8px;margin-top:16px;position:relative;z-index:1;}
+.bal-action{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:7px 13px;font-size:11px;font-weight:600;color:#fff;cursor:pointer;text-transform:uppercase;letter-spacing:.3px;transition:all .2s;}
+.bal-action:hover{background:rgba(255,255,255,.22);}
+.nova-section{margin:18px 16px 0;}
+.nova-badge{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.14);border-radius:50px;padding:7px 14px;font-size:10px;font-weight:600;color:var(--ts);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:11px;}
+.ndot2{width:6px;height:6px;background:#00b4d8;border-radius:50%;animation:pulse2 2s ease-in-out infinite;}
+.nova-q{background:rgba(255,255,255,.06);border:1px solid var(--gb);border-radius:18px;padding:16px 18px;font-size:15px;font-weight:500;color:#fff;line-height:1.45;margin-bottom:12px;}
+.nova-row{display:flex;gap:9px;}
+.nova-input{flex:1;background:rgba(255,255,255,.07);border:1px solid var(--gb);border-radius:50px;padding:12px 17px;color:#fff;font-size:14px;outline:none;font-family:'Inter',sans-serif;transition:all .2s;}
+.nova-input::placeholder{color:var(--tm);}
+.nova-input:focus{border-color:#00b4d8;}
+.voice-btn{width:46px;height:46px;background:linear-gradient(135deg,#0077b6,#00b4d8);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:20px;flex-shrink:0;transition:transform .2s;}
+.voice-btn:hover{transform:scale(1.08);}
+.send-btn{width:46px;height:46px;background:rgba(255,255,255,.09);border:1px solid var(--gb);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;flex-shrink:0;}
+.sec{margin:18px 16px 0;}
+.sec-label{font-size:10px;font-weight:700;color:var(--tm);letter-spacing:2px;text-transform:uppercase;margin-bottom:11px;}
+.quick-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;}
+.quick-item{background:rgba(255,255,255,.05);border:1px solid var(--gb);border-radius:14px;padding:13px 6px;text-align:center;cursor:pointer;transition:all .2s;}
+.quick-item:hover{background:rgba(255,255,255,.1);transform:translateY(-2px);}
+.q-icon{font-size:22px;margin-bottom:5px;}
+.q-label{font-size:9px;font-weight:600;color:var(--ts);letter-spacing:.5px;text-transform:uppercase;}
+.a-card{background:rgba(255,255,255,.045);border:1px solid var(--gb);border-radius:16px;padding:16px;margin-bottom:11px;position:relative;overflow:hidden;}
+.a-card::before{content:'';position:absolute;top:0;left:0;width:3px;height:100%;}
+.a-card.salary::before{background:var(--ok2);}
+.a-card.alert::before{background:var(--warn);}
+.a-card.danger::before{background:var(--err);}
+.a-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px;}
+.a-ico{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.a-ico.salary{background:rgba(0,212,160,.14);}
+.a-ico.alert{background:rgba(245,166,35,.14);}
+.a-ico.danger{background:rgba(255,77,109,.14);}
+.a-time{font-size:11px;color:var(--tm);}
+.a-title{font-size:14px;font-weight:600;color:#fff;margin-bottom:4px;}
+.a-body{font-size:12px;color:var(--ts);line-height:1.45;margin-bottom:12px;}
+.a-btns{display:flex;gap:8px;}
+.abtn{border-radius:20px;padding:7px 15px;font-size:11px;font-weight:600;cursor:pointer;border:none;transition:all .2s;letter-spacing:.3px;}
+.abtn.p{background:linear-gradient(90deg,#0077b6,#00b4d8);color:#fff;}
+.abtn.s{background:rgba(255,255,255,.07);color:var(--ts);border:1px solid var(--gb);}
+.txn-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;}
+.see-all{font-size:12px;color:#00b4d8;cursor:pointer;font-weight:500;}
+.txn-card{background:rgba(255,255,255,.035);border:1px solid var(--gb);border-radius:16px;overflow:hidden;}
+.txn-item{display:flex;align-items:center;padding:13px 15px;border-bottom:1px solid rgba(255,255,255,.046);}
+.txn-item:last-child{border-bottom:none;}
+.txn-ico{width:38px;height:38px;border-radius:11px;background:rgba(255,255,255,.07);display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;margin-right:11px;}
+.txn-info{flex:1;}
+.txn-name{font-size:13px;font-weight:500;color:#fff;}
+.txn-meta{font-size:10px;color:var(--tm);margin-top:2px;}
+.txn-amt{font-size:13px;font-weight:600;}
+.txn-amt.credit{color:var(--ok2);}
+.txn-amt.debit{color:var(--ts);}
+.bottom-nav{position:sticky;bottom:0;background:rgba(5,10,20,.96);border-top:1px solid var(--gb);display:flex;padding:10px 0 18px;z-index:10;backdrop-filter:blur(24px);}
+.nav-item{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:5px 0;transition:all .2s;}
+.nav-icon{font-size:21px;color:var(--tm);transition:all .2s;}
+.nav-label{font-size:9px;font-weight:600;color:var(--tm);letter-spacing:.5px;text-transform:uppercase;transition:all .2s;}
+.nav-item.active .nav-icon,.nav-item.active .nav-label{color:#00b4d8;}
+.nav-item.active .nav-icon{transform:scale(1.14);}
+.score-ring{position:relative;width:160px;height:160px;margin:0 auto 16px;}
+.score-inner{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;}
+.score-num{font-size:40px;font-weight:900;color:#fff;}
+.score-lbl{font-size:11px;color:var(--ts);}
+.score-list{margin:0 16px;}
+.score-item{display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:rgba(255,255,255,.038);border:1px solid var(--gb);border-radius:13px;margin-bottom:8px;}
+.si-left{display:flex;align-items:center;gap:9px;}
+.si-right{display:flex;align-items:center;gap:9px;}
+.si-bar{width:78px;height:5px;background:rgba(255,255,255,.09);border-radius:3px;overflow:hidden;}
+.si-fill{height:100%;border-radius:3px;animation:progress 1.2s ease forwards;}
+.si-val{font-size:12px;font-weight:600;color:#00b4d8;min-width:26px;text-align:right;}
+.stage-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:11px;}
+.stage-card{background:rgba(255,255,255,.038);border:1px solid var(--gb);border-radius:13px;padding:11px 6px;text-align:center;cursor:pointer;transition:all .2s;}
+.stage-card.active{background:rgba(0,119,182,.22);border-color:rgba(0,180,216,.38);}
+.stage-card:hover{background:rgba(255,255,255,.08);}
+.chat-hdr{padding:52px 20px 14px;display:flex;align-items:center;gap:11px;}
+.back-btn{width:38px;height:38px;background:rgba(255,255,255,.07);border:1px solid var(--gb);border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:17px;color:#fff;flex-shrink:0;transition:all .2s;}
+.back-btn:hover{background:rgba(255,255,255,.14);}
+.msg-wrap{margin-bottom:13px;}
+.msg-wrap.user{display:flex;justify-content:flex-end;}
+.bubble{padding:12px 15px;border-radius:18px;font-size:13px;line-height:1.5;}
+.bubble.ai{background:rgba(0,119,182,.22);border:1px solid rgba(0,180,216,.18);color:#fff;border-radius:4px 18px 18px 18px;max-width:84%;}
+.bubble.user{background:linear-gradient(135deg,#0077b6,#00b4d8);color:#fff;border-radius:18px 18px 4px 18px;max-width:78%;}
+.intent-card{background:rgba(0,48,135,.28);border:1px solid rgba(0,180,216,.26);border-radius:13px;padding:13px;margin-top:8px;}
+.irow{display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;}
+.ilbl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:1px;}
+.ival{font-size:11px;font-weight:600;color:#00b4d8;}
+.conf-bar{height:5px;background:rgba(255,255,255,.09);border-radius:3px;overflow:hidden;margin-bottom:10px;}
+.conf-fill{height:100%;background:linear-gradient(90deg,#0077b6,#00b4d8);border-radius:3px;}
+.pill-action{display:inline-flex;background:rgba(0,180,216,.12);border:1px solid rgba(0,180,216,.28);border-radius:18px;padding:5px 12px;font-size:11px;font-weight:500;color:#00b4d8;cursor:pointer;}
+.why-box{background:rgba(0,48,135,.18);border:1px solid rgba(0,180,216,.18);border-radius:12px;padding:13px;margin-top:9px;}
+.why-title{font-size:10px;font-weight:700;color:#00b4d8;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;}
+.why-item{display:flex;align-items:flex-start;gap:7px;margin-bottom:6px;font-size:11px;color:var(--ts);}
+.why-chk{color:var(--ok2);flex-shrink:0;font-size:13px;}
+.tdot{width:7px;height:7px;background:rgba(0,180,216,.6);border-radius:50%;animation:typing 1.4s ease-in-out infinite;display:inline-block;margin-right:4px;}
+.chat-input-bar{padding:10px 16px 24px;display:flex;align-items:center;gap:9px;border-top:1px solid var(--gb);background:rgba(5,10,20,.88);backdrop-filter:blur(20px);}
+.chat-inp{flex:1;background:rgba(255,255,255,.07);border:1px solid var(--gb);border-radius:22px;padding:12px 17px;color:#fff;font-size:13px;outline:none;font-family:'Inter',sans-serif;}
+.chat-inp::placeholder{color:var(--tm);}
+.chat-inp:focus{border-color:#00b4d8;}
+.chat-send{width:44px;height:44px;background:linear-gradient(135deg,#0077b6,#00b4d8);border:none;border-radius:50%;display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;flex-shrink:0;}
+.atabs{display:flex;gap:6px;padding:14px 20px 0;overflow-x:auto;}
+.atab{background:rgba(255,255,255,.055);border:1px solid var(--gb);border-radius:20px;padding:7px 14px;font-size:11px;font-weight:600;color:var(--ts);cursor:pointer;white-space:nowrap;transition:all .2s;}
+.atab.active{background:linear-gradient(90deg,#0077b6,#00b4d8);border-color:transparent;color:#fff;}
+.chart-box{margin:14px 16px;background:rgba(255,255,255,.038);border:1px solid var(--gb);border-radius:16px;padding:18px;}
+.chart-title{font-size:12px;font-weight:600;color:#fff;margin-bottom:14px;}
+.cat-item{display:flex;align-items:center;padding:11px 13px;background:rgba(255,255,255,.036);border:1px solid var(--gb);border-radius:12px;margin-bottom:7px;}
+.cat-dot{width:9px;height:9px;border-radius:50%;margin-right:9px;flex-shrink:0;}
+.insight-box{margin:0 16px 10px;background:rgba(0,48,135,.2);border:1px solid rgba(0,180,216,.18);border-radius:13px;padding:13px;}
+.insight-lbl{font-size:9px;font-weight:700;color:#00b4d8;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:5px;}
+.insight-box p{font-size:12px;color:var(--ts);line-height:1.5;}
+.fd-type-grid{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:14px;}
+.fd-type{background:rgba(255,255,255,.045);border:1px solid var(--gb);border-radius:13px;padding:13px;cursor:pointer;transition:all .2s;}
+.fd-type.sel{background:rgba(0,119,182,.22);border-color:rgba(0,180,216,.38);}
+.fd-type h4{font-size:12px;font-weight:600;color:#fff;margin-bottom:2px;}
+.fd-type p{font-size:10px;color:var(--ts);}
+.fd-rate{font-size:17px;font-weight:700;color:#00b4d8;margin-top:5px;}
+.fd-calc{background:rgba(255,255,255,.038);border:1px solid var(--gb);border-radius:16px;padding:18px;margin-bottom:14px;}
+.fd-lbl{font-size:10px;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;display:block;}
+.fd-inp{width:100%;background:rgba(255,255,255,.07);border:1px solid var(--gb);border-radius:10px;padding:11px 13px;color:#fff;font-size:15px;font-weight:600;outline:none;font-family:'Inter',sans-serif;margin-bottom:12px;}
+.fd-inp:focus{border-color:#00b4d8;}
+.fd-result{background:linear-gradient(135deg,rgba(0,119,182,.28),rgba(0,180,216,.1));border:1px solid rgba(0,180,216,.26);border-radius:13px;padding:14px;margin-top:14px;}
+.fd-row{display:flex;justify-content:space-between;margin-bottom:7px;}
+.fd-rl{font-size:12px;color:var(--ts);}
+.fd-rv{font-size:12px;font-weight:600;color:#fff;}
+.fd-rv.hl{color:var(--ok2);}
+.meth-tabs{display:flex;gap:7px;margin-bottom:16px;}
+.m-tab{flex:1;background:rgba(255,255,255,.055);border:1px solid var(--gb);border-radius:11px;padding:9px 3px;color:rgba(255,255,255,.5);font-size:11px;font-weight:600;cursor:pointer;text-align:center;transition:all .2s;}
+.m-tab.sel{background:linear-gradient(90deg,#0077b6,#00b4d8);border-color:transparent;color:#fff;}
+.qamts{display:flex;gap:7px;margin-bottom:16px;}
+.qamt{flex:1;background:rgba(255,255,255,.055);border:1px solid var(--gb);border-radius:9px;padding:8px 3px;color:rgba(255,255,255,.65);font-size:11px;cursor:pointer;text-align:center;transition:all .2s;}
+.qamt:hover{background:rgba(255,255,255,.1);}
+.txn-sum{background:rgba(0,48,135,.2);border:1px solid rgba(0,180,216,.26);border-radius:16px;padding:18px;margin-bottom:16px;}
+.sum-row{display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid rgba(255,255,255,.055);}
+.sum-row:last-child{border-bottom:none;}
+.sum-l{font-size:12px;color:var(--ts);}
+.sum-r{font-size:12px;font-weight:600;color:#fff;}
+.warn-box{background:rgba(255,77,109,.05);border:1px solid rgba(255,77,109,.18);border-radius:11px;padding:11px;margin-bottom:16px;font-size:11px;color:rgba(255,255,255,.5);}
+.two-btn{display:grid;grid-template-columns:1fr 1fr;gap:9px;}
+.success-scr{text-align:center;padding:56px 24px 0;}
+.nova-nudge{background:rgba(0,212,160,.09);border:1px solid rgba(0,212,160,.26);border-radius:11px;padding:13px;margin-bottom:18px;font-size:12px;color:var(--ts);}
+.notif-item{display:flex;align-items:flex-start;gap:11px;padding:13px 0;border-bottom:1px solid rgba(255,255,255,.055);}
+.n-ico{width:40px;height:40px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;}
+.n-ico.g{background:rgba(0,212,160,.14);}
+.n-ico.y{background:rgba(245,166,35,.14);}
+.n-ico.b{background:rgba(0,119,182,.14);}
+.n-info{flex:1;}
+.n-title{font-size:13px;font-weight:600;color:#fff;margin-bottom:2px;}
+.n-body{font-size:11px;color:var(--ts);line-height:1.4;}
+.n-time{font-size:10px;color:var(--tm);margin-top:3px;}
+.n-new{width:8px;height:8px;background:#00b4d8;border-radius:50%;flex-shrink:0;margin-top:5px;animation:pulse2 2s ease-in-out infinite;}
+.ch-card{background:rgba(255,255,255,.038);border:1px solid var(--gb);border-radius:16px;padding:16px;margin-bottom:11px;cursor:pointer;transition:all .2s;}
+.ch-card:hover{background:rgba(255,255,255,.066);transform:translateY(-2px);}
+.ch-top{display:flex;align-items:center;gap:11px;margin-bottom:9px;}
+.ch-title{font-size:14px;font-weight:600;color:#fff;}
+.ch-desc{font-size:12px;color:var(--ts);line-height:1.4;}
+.ch-tag{display:inline-flex;background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.2);border-radius:9px;padding:3px 10px;font-size:9px;font-weight:600;color:#00b4d8;margin-top:8px;text-transform:uppercase;letter-spacing:.5px;}
+.wa-mock{background:rgba(37,211,102,.07);border:1px solid rgba(37,211,102,.18);border-radius:12px;padding:12px;margin-top:11px;}
+.wa-msg{display:flex;gap:7px;margin-bottom:7px;}
+.wa-msg.out{flex-direction:row-reverse;}
+.wa-av{width:26px;height:26px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0;}
+.wa-bbl{background:rgba(255,255,255,.08);border-radius:8px;padding:7px 11px;font-size:11px;color:#fff;max-width:80%;white-space:pre-wrap;}
+.wa-bbl.out{background:rgba(37,211,102,.18);}
+.ivr-step{display:flex;align-items:flex-start;gap:9px;margin-bottom:9px;}
+.ivr-n{width:22px;height:22px;background:rgba(0,119,182,.28);border:1px solid rgba(0,180,216,.28);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#00b4d8;flex-shrink:0;}
+.ivr-t{font-size:11px;color:var(--ts);padding-top:3px;}
+.admin-stats{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin:14px 16px;}
+.stat-card{background:rgba(255,255,255,.038);border:1px solid var(--gb);border-radius:13px;padding:13px;}
+.stat-lbl{font-size:9px;color:var(--tm);text-transform:uppercase;letter-spacing:1px;margin-bottom:5px;}
+.stat-val{font-size:22px;font-weight:800;color:#fff;}
+.stat-sub{font-size:10px;color:var(--ok2);margin-top:2px;}
+.worry-card{background:rgba(255,255,255,.038);border:1px solid var(--gb);border-radius:16px;padding:16px;margin-bottom:11px;}
+.w-lbl-row{display:flex;justify-content:space-between;margin-bottom:4px;}
+.w-lbl{font-size:11px;color:var(--ts);}
+.w-val{font-size:11px;font-weight:600;color:#fff;}
+.w-track{height:7px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;margin-bottom:9px;}
+.w-fill{height:100%;border-radius:4px;animation:progress 1.2s ease forwards;}
+.scrn-hdr{display:flex;align-items:center;gap:11px;padding:52px 20px 14px;}
+.scrn-hdr h2{font-size:18px;font-weight:700;color:#fff;}
+/* WELCOME / FLOW SCREENS */
+.welcome-hero{padding:52px 24px 28px;text-align:center;position:relative;z-index:2;}
+.welcome-hero h1{font-size:38px;font-weight:900;color:#fff;letter-spacing:1px;}
+.welcome-hero .sub{font-size:13px;color:var(--ts);margin-top:8px;line-height:1.6;}
+.trust-row{display:flex;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:14px;}
+.trust-chip{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:5px 12px;font-size:10px;font-weight:600;color:rgba(255,255,255,.8);letter-spacing:.5px;}
+.assistant-card{margin:0 20px;background:rgba(0,48,135,.5);border:1px solid rgba(0,180,216,.3);border-radius:20px;padding:20px;backdrop-filter:blur(20px);}
+.assistant-greeting{font-size:16px;font-weight:600;color:#fff;margin-bottom:6px;}
+.assistant-sub{font-size:13px;color:var(--ts);margin-bottom:18px;line-height:1.4;}
+.assistant-input-row{display:flex;gap:9px;margin-bottom:16px;}
+.assistant-inp{flex:1;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:50px;padding:12px 16px;color:#fff;font-size:14px;outline:none;font-family:'Inter',sans-serif;}
+.assistant-inp::placeholder{color:rgba(255,255,255,.45);}
+.chips-row{display:flex;gap:8px;flex-wrap:wrap;}
+.chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:8px 14px;font-size:12px;font-weight:500;color:#fff;cursor:pointer;transition:all .2s;white-space:nowrap;}
+.chip:hover{background:rgba(0,180,216,.25);border-color:#00b4d8;}
+.chip.active{background:linear-gradient(90deg,#0077b6,#00b4d8);border-color:transparent;}
+.step-dots{display:flex;justify-content:center;gap:6px;padding:14px 0;}
+.sdot{width:6px;height:6px;border-radius:50%;background:rgba(255,255,255,.25);transition:all .3s;}
+.sdot.active{width:20px;border-radius:3px;background:#00b4d8;}
+.chat-flow{padding:16px 16px 0;flex:1;overflow-y:auto;}
+.lang-note{background:rgba(0,119,182,.15);border:1px solid rgba(0,180,216,.2);border-radius:12px;padding:10px 14px;margin-bottom:16px;font-size:12px;color:var(--ts);text-align:center;}
+.lang-flags{display:flex;justify-content:center;gap:6px;flex-wrap:wrap;margin-top:6px;}
+.flag-chip{font-size:10px;background:rgba(255,255,255,.06);border-radius:10px;padding:3px 8px;color:var(--ts);}
+.thinking-card{background:rgba(255,255,255,.04);border:1px solid var(--gb);border-radius:14px;padding:14px;margin:12px 0;}
+.thinking-top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.thinking-dot{width:8px;height:8px;background:#00b4d8;border-radius:50%;animation:pulse2 1.2s ease-in-out infinite;}
+.thinking-label{font-size:11px;font-weight:600;color:#00b4d8;letter-spacing:1px;text-transform:uppercase;}
+.thinking-bar{height:4px;background:rgba(255,255,255,.07);border-radius:2px;overflow:hidden;}
+.thinking-fill{height:100%;background:linear-gradient(90deg,#0077b6,#00b4d8);border-radius:2px;animation:progress 1.5s ease forwards;--pw:85%;}
+.rec-card{margin:0 16px;background:linear-gradient(135deg,rgba(0,48,135,.8),rgba(0,119,182,.5));border:1px solid rgba(0,180,216,.3);border-radius:20px;padding:22px;position:relative;overflow:hidden;}
+.rec-card::before{content:'';position:absolute;top:-40px;right:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(0,180,216,.2),transparent 70%);border-radius:50%;}
+.rec-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(0,212,160,.15);border:1px solid rgba(0,212,160,.3);border-radius:20px;padding:5px 12px;font-size:10px;font-weight:700;color:var(--ok2);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;}
+.rec-icon{font-size:36px;margin-bottom:10px;}
+.rec-title{font-size:20px;font-weight:700;color:#fff;margin-bottom:6px;position:relative;z-index:1;}
+.rec-desc{font-size:13px;color:var(--ts);line-height:1.5;margin-bottom:16px;position:relative;z-index:1;}
+.rec-meta{display:flex;gap:10px;position:relative;z-index:1;}
+.rec-meta-item{background:rgba(255,255,255,.1);border-radius:10px;padding:8px 12px;text-align:center;}
+.rec-meta-label{font-size:9px;color:rgba(255,255,255,.55);text-transform:uppercase;letter-spacing:.5px;margin-bottom:2px;}
+.rec-meta-val{font-size:14px;font-weight:700;color:#fff;}
+.why-section{padding:0 16px;}
+.why-reason{display:flex;align-items:flex-start;gap:12px;background:rgba(255,255,255,.04);border:1px solid var(--gb);border-radius:14px;padding:14px;margin-bottom:10px;}
+.why-num{width:28px;height:28px;background:linear-gradient(135deg,#0077b6,#00b4d8);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;flex-shrink:0;}
+.why-text-wrap h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px;}
+.why-text-wrap p{font-size:12px;color:var(--ts);line-height:1.4;}
+.trust-banner{background:rgba(0,135,90,.1);border:1px solid rgba(0,135,90,.25);border-radius:12px;padding:12px 14px;margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.trust-text{font-size:12px;color:rgba(0,212,160,.9);font-weight:500;line-height:1.4;}
+.consent-card{margin:0 16px;background:rgba(255,255,255,.04);border:1px solid var(--gb);border-radius:20px;overflow:hidden;}
+.consent-header{background:linear-gradient(135deg,rgba(0,48,135,.9),rgba(0,119,182,.6));padding:20px;text-align:center;}
+.consent-header h3{font-size:17px;font-weight:700;color:#fff;margin-bottom:4px;}
+.consent-header p{font-size:12px;color:rgba(255,255,255,.6);}
+.consent-body{padding:20px;}
+.consent-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06);}
+.consent-row:last-child{border-bottom:none;}
+.consent-label{font-size:12px;color:var(--ts);}
+.consent-value{font-size:13px;font-weight:600;color:#fff;text-align:right;}
+.consent-value.green{color:var(--ok2);}
+.secure-badge{display:flex;align-items:center;gap:8px;background:rgba(0,135,90,.08);border:1px solid rgba(0,135,90,.2);border-radius:10px;padding:10px 14px;margin:0 16px 14px;font-size:12px;color:rgba(0,212,160,.9);}
+.success-icon-wrap{width:100px;height:100px;background:linear-gradient(135deg,#00875A,#00d4a0);border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;font-size:44px;animation:pop .5s cubic-bezier(.36,.07,.19,.97) forwards;}
+.success-title{font-size:24px;font-weight:800;color:#fff;margin-bottom:8px;}
+.success-sub{font-size:14px;color:var(--ts);line-height:1.5;margin-bottom:24px;}
+.success-detail-card{background:rgba(0,135,90,.1);border:1px solid rgba(0,212,160,.2);border-radius:16px;padding:18px;margin:0 0 22px;text-align:left;}
+.success-detail-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(255,255,255,.055);}
+.success-detail-row:last-child{border-bottom:none;}
+.sdl{font-size:12px;color:var(--ts);}
+.sdr{font-size:12px;font-weight:600;color:#fff;}
+.sdr.g{color:var(--ok2);}
+.next-actions{display:flex;flex-direction:column;gap:10px;}
+.growth-header{padding:52px 20px 16px;}
+.growth-header h2{font-size:20px;font-weight:700;color:#fff;margin-bottom:4px;}
+.growth-header p{font-size:13px;color:var(--ts);}
+.growth-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.25);border-radius:20px;padding:5px 12px;font-size:10px;font-weight:700;color:var(--warn);text-transform:uppercase;letter-spacing:1px;margin-top:8px;}
+.wellness-hero-card{margin:0 16px 14px;background:linear-gradient(135deg,rgba(0,48,135,.85),rgba(0,119,182,.55));border:1px solid rgba(0,180,216,.28);border-radius:20px;padding:20px;position:relative;overflow:hidden;}
+.wellness-hero-card::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(0,180,216,.15),transparent 70%);border-radius:50%;}
+.wh-top{display:flex;justify-content:space-between;align-items:flex-start;position:relative;z-index:1;}
+.wh-score{font-size:48px;font-weight:900;color:#fff;line-height:1;}
+.wh-label{font-size:11px;color:rgba(255,255,255,.55);margin-top:4px;}
+.growth-section{margin:0 16px 14px;}
+.growth-card{background:rgba(255,255,255,.038);border:1px solid var(--gb);border-radius:14px;padding:14px;margin-bottom:10px;}
+.growth-card-title{font-size:10px;font-weight:700;color:var(--tm);letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;}
+.activity-item{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid rgba(255,255,255,.04);}
+.activity-item:last-child{border-bottom:none;}
+.act-ico{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.act-ico.blue{background:rgba(0,119,182,.18);}
+.act-ico.green{background:rgba(0,135,90,.18);}
+.act-ico.orange{background:rgba(245,166,35,.18);}
+.act-name{flex:1;font-size:12px;color:#fff;}
+.act-time{font-size:10px;color:var(--tm);}
+.goal-item{margin-bottom:12px;}
+.goal-label-row{display:flex;justify-content:space-between;margin-bottom:5px;}
+.goal-name{font-size:12px;color:#fff;font-weight:500;}
+.goal-pct{font-size:12px;font-weight:700;color:#00b4d8;}
+.goal-track{height:8px;background:rgba(255,255,255,.07);border-radius:4px;overflow:hidden;}
+.goal-fill{height:100%;border-radius:4px;animation:progress 1.2s ease forwards;}
+.nba-card{background:linear-gradient(135deg,rgba(0,48,135,.7),rgba(0,119,182,.4));border:1px solid rgba(0,180,216,.25);border-radius:14px;padding:14px;display:flex;align-items:center;gap:12px;}
+.nba-ico{font-size:28px;}
+.nba-text h4{font-size:13px;font-weight:600;color:#fff;margin-bottom:3px;}
+.nba-text p{font-size:11px;color:var(--ts);}
+.nba-arrow{font-size:18px;color:#00b4d8;margin-left:auto;}
+.pill{display:inline-flex;align-items:center;gap:4px;background:rgba(0,180,216,.1);border:1px solid rgba(0,180,216,.2);border-radius:18px;padding:5px 11px;font-size:10px;font-weight:600;color:#00b4d8;}
+.spacer{height:90px;}
+.screen-pad{padding:0 16px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script>
+const{useState,useEffect,useRef}=React;
+const T={
+  english:{g:"Namaste,",sav:"Savings account balance",acc:"Acc",send:"Send Money",fd:"Fixed Deposit",wel:"Wellness Score",nova_q:"What is your biggest money worry today?",ph:"Type your worry...",qa:"Quick Actions",rt:"Recent Transactions",sa:"See All",ant:"Nova AI Anticipates",ev:"Financial Wellness",an:"AI Analytics",lt:"Pehla Kadam Lite",login:"Secure Login",mob:"Mobile Number",mpin:"MPIN (4-digit)",otp:"Enter OTP",face:"Face ID",fng:"Fingerprint",si:"Sign In",welcome:"Namaste! How can I help you today?",save:"Save money",bills:"Pay bills",loan:"Check loan eligibility"},
+  hindi:{g:"नमस्ते,",sav:"बचत खाता शेष",acc:"खाता",send:"पैसे भेजें",fd:"सावधि जमा",wel:"वेलनेस स्कोर",nova_q:"आज आपकी सबसे बड़ी पैसे की टेंशन क्या है?",ph:"अपनी चिंता लिखें...",qa:"त्वरित क्रियाएं",rt:"हाल के लेनदेन",sa:"सभी देखें",ant:"नोवा AI अनुमान",ev:"वित्तीय स्वास्थ्य",an:"AI विश्लेषण",lt:"पहला कदम लाइट",login:"सुरक्षित लॉगिन",mob:"मोबाइल नंबर",mpin:"MPIN (4-अंक)",otp:"OTP दर्ज करें",face:"फेस ID",fng:"फिंगरप्रिंट",si:"साइन इन",welcome:"नमस्ते! मैं कैसे मदद कर सकती हूँ?",save:"बचत करें",bills:"बिल भुगतान",loan:"लोन पात्रता जांचें"},
+  assamese:{g:"নমস্কাৰ,",sav:"সঞ্চয় একাউন্টৰ বেলেন্স",acc:"একাউন্ট",send:"টকা পঠাওক",fd:"স্থায়ী আমানত",wel:"স্বাস্থ্য স্কোৰ",nova_q:"আজি আপোনাৰ সবচেয়ে ডাঙৰ টকাৰ চিন্তা কি?",ph:"আপোনাৰ চিন্তা লিখক...",qa:"দ্ৰুত কাৰ্য",rt:"শেহতীয়া লেনদেন",sa:"সকলো চাওক",ant:"নভা AI অনুমান",ev:"বিত্তীয় স্বাস্থ্য",an:"AI বিশ্লেষণ",lt:"পহিলা কদম লাইট",login:"সুৰক্ষিত লগইন",mob:"মোবাইল নম্বৰ",mpin:"MPIN",otp:"OTP দিয়ক",face:"ফেচ ID",fng:"ফিংগাৰপ্ৰিন্ট",si:"চাইন ইন",welcome:"নমস্কাৰ! মই কেনেকৈ সহায় কৰিব পাৰো?",save:"সঞ্চয় কৰক",bills:"বিল পৰিশোধ",loan:"ঋণ যোগ্যতা পৰীক্ষা"},
+  bengali:{g:"নমস্কার,",sav:"সঞ্চয় অ্যাকাউন্ট ব্যালেন্স",acc:"অ্যাকাউন্ট",send:"টাকা পাঠান",fd:"স্থায়ী আমানত",wel:"ওয়েলনেস স্কোর",nova_q:"আজ আপনার সবচেয়ে বড় টাকার চিন্তা কী?",ph:"আপনার চিন্তা লিখুন...",qa:"দ্রুত কার্যক্রম",rt:"সাম্প্রতিক লেনদেন",sa:"সব দেখুন",ant:"নোভা AI অনুমান",ev:"আর্থিক স্বাস্থ্য",an:"AI বিশ্লেষণ",lt:"পহলা কদম লাইট",login:"নিরাপদ লগইন",mob:"মোবাইল নম্বর",mpin:"MPIN",otp:"OTP দিন",face:"ফেস ID",fng:"ফিঙ্গারপ্রিন্ট",si:"সাইন ইন",welcome:"নমস্কার! কীভাবে সাহায্য করতে পারি?",save:"সঞ্চয় করুন",bills:"বিল পরিশোধ",loan:"ঋণ যোগ্যতা পরীক্ষা"},
+  tamil:{g:"வணக்கம்,",sav:"சேமிப்பு கணக்கு இருப்பு",acc:"கணக்கு",send:"பணம் அனுப்பு",fd:"நிலையான வைப்பு",wel:"நல்வாழ்வு மதிப்பெண்",nova_q:"இன்று உங்கள் மிகப்பெரிய பண கவலை என்ன?",ph:"உங்கள் கவலையை தட்டச்சு செய்யுங்கள்...",qa:"விரைவு செயல்கள்",rt:"சமீபத்திய பரிவர்த்தனைகள்",sa:"எல்லாம் பார்",ant:"நோவா AI முன்னறிவிப்பு",ev:"நிதி ஆரோக்கியம்",an:"AI பகுப்பாய்வு",lt:"பெஹ்லா கதம் லைட்",login:"பாதுகாப்பான உள்நுழைவு",mob:"மொபைல் எண்",mpin:"MPIN",otp:"OTP உள்ளிடவும்",face:"முக ID",fng:"கைரேகை",si:"உள்நுழைவு",welcome:"வணக்கம்! எப்படி உதவலாம்?",save:"சேமிக்கவும்",bills:"பில் செலுத்தவும்",loan:"கடன் தகுதி சரிபார்க்க"},
+  telugu:{g:"నమస్కారం,",sav:"పొదుపు ఖాతా బ్యాలెన్స్",acc:"ఖాతా",send:"డబ్బు పంపండి",fd:"స్థిర డిపాజిట్",wel:"వెల్నెస్ స్కోర్",nova_q:"నేడు మీ అతిపెద్ద డబ్బు ఆందోళన ఏమిటి?",ph:"మీ ఆందోళన టైప్ చేయండి...",qa:"త్వరిత చర్యలు",rt:"ఇటీవలి లావాదేవీలు",sa:"అన్నీ చూడు",ant:"నోవా AI అంచనా",ev:"ఆర్థిక ఆరోగ్యం",an:"AI విశ్లేషణ",lt:"పెహ్లా కదమ్ లైట్",login:"సురక్షిత లాగిన్",mob:"మొబైల్ నంబర్",mpin:"MPIN",otp:"OTP నమోదు చేయండి",face:"ముఖ ID",fng:"వేలిముద్ర",si:"సైన్ ఇన్",welcome:"నమస్కారం! ఎలా సహాయపడగలను?",save:"పొదుపు చేయండి",bills:"బిల్లు చెల్లించండి",loan:"రుణ అర్హత తనిఖీ"},
+  marathi:{g:"नमस्कार,",sav:"बचत खाते शिल्लक",acc:"खाते",send:"पैसे पाठवा",fd:"मुदत ठेव",wel:"वेलनेस स्कोअर",nova_q:"आज तुमची सर्वात मोठी पैशाची चिंता काय आहे?",ph:"तुमची चिंता टाइप करा...",qa:"त्वरित कृती",rt:"अलीकडील व्यवहार",sa:"सर्व पहा",ant:"नोव्हा AI अंदाज",ev:"आर्थिक आरोग्य",an:"AI विश्लेषण",lt:"पहला कदम लाइट",login:"सुरक्षित लॉगिन",mob:"मोबाइल नंबर",mpin:"MPIN",otp:"OTP प्रविष्ट करा",face:"फेस ID",fng:"फिंगरप्रिंट",si:"साइन इन",welcome:"नमस्कार! मी कशी मदत करू?",save:"बचत करा",bills:"बिल भरा",loan:"कर्ज पात्रता तपासा"},
+  gujarati:{g:"નમસ્તે,",sav:"બચત ખાતાની બેલેન્સ",acc:"ખાતો",send:"પૈસા મોકલો",fd:"ફિક્સ ડિપોઝિટ",wel:"વેલ્નેસ સ્કોર",nova_q:"આજે તમારી સૌથી મોટી પૈસાની ચિંતા શું છે?",ph:"તમારી ચિંતા ટાઈપ કરો...",qa:"ઝડપી ક્રિયાઓ",rt:"તાજેતરના વ્યવહારો",sa:"બધું જુઓ",ant:"નોવા AI અનુમાન",ev:"નાણાકીય સ્વાસ્થ્ય",an:"AI વિશ્લેષણ",lt:"પહેલો કદમ લાઈટ",login:"સુરક્ષિત લૉગિન",mob:"મોબાઇલ નંબર",mpin:"MPIN",otp:"OTP દાખલ કરો",face:"ફેસ ID",fng:"ફિંગરપ્રિન્ટ",si:"સાઇન ઇન",welcome:"નમસ્તે! કેવી રીતે મદદ કરું?",save:"બચત કરો",bills:"બિલ ભરો",loan:"લોન પાત્રતા ચકાસો"},
+  punjabi:{g:"ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ,",sav:"ਬੱਚਤ ਖਾਤੇ ਦੀ ਬਕਾਇਆ",acc:"ਖਾਤਾ",send:"ਪੈਸੇ ਭੇਜੋ",fd:"ਫਿਕਸਡ ਡਿਪੋਜ਼ਿਟ",wel:"ਵੈੱਲਨੈੱਸ ਸਕੋਰ",nova_q:"ਅੱਜ ਤੁਹਾਡੀ ਸਭ ਤੋਂ ਵੱਡੀ ਪੈਸਿਆਂ ਦੀ ਚਿੰਤਾ ਕੀ ਹੈ?",ph:"ਆਪਣੀ ਚਿੰਤਾ ਲਿਖੋ...",qa:"ਤੁਰੰਤ ਕਾਰਵਾਈਆਂ",rt:"ਹਾਲੀਆ ਲੈਣ-ਦੇਣ",sa:"ਸਭ ਦੇਖੋ",ant:"ਨੋਵਾ AI ਅਨੁਮਾਨ",ev:"ਵਿੱਤੀ ਸਿਹਤ",an:"AI ਵਿਸ਼ਲੇਸ਼ਣ",lt:"ਪਹਿਲਾ ਕਦਮ ਲਾਈਟ",login:"ਸੁਰੱਖਿਅਤ ਲੌਗਿਨ",mob:"ਮੋਬਾਈਲ ਨੰਬਰ",mpin:"MPIN",otp:"OTP ਦਾਖਲ ਕਰੋ",face:"ਫੇਸ ID",fng:"ਫਿੰਗਰਪ੍ਰਿੰਟ",si:"ਸਾਈਨ ਇਨ",welcome:"ਸਤਿ ਸ੍ਰੀ ਅਕਾਲ! ਕਿਵੇਂ ਮਦਦ ਕਰਾਂ?",save:"ਬੱਚਤ ਕਰੋ",bills:"ਬਿੱਲ ਭੁਗਤਾਨ",loan:"ਕਰਜ਼ ਯੋਗਤਾ ਜਾਂਚੋ"},
+  kannada:{g:"ನಮಸ್ಕಾರ,",sav:"ಉಳಿತಾಯ ಖಾತೆ ಬ್ಯಾಲೆನ್ಸ್",acc:"ಖಾತೆ",send:"ಹಣ ಕಳುಹಿಸಿ",fd:"ಸ್ಥಿರ ಠೇವಣಿ",wel:"ಆರೋಗ್ಯ ಸ್ಕೋರ್",nova_q:"ಇಂದು ನಿಮ್ಮ ಅತಿದೊಡ್ಡ ಹಣದ ಚಿಂತೆ ಏನು?",ph:"ನಿಮ್ಮ ಚಿಂತೆಯನ್ನು ಟೈಪ್ ಮಾಡಿ...",qa:"ತ್ವರಿತ ಕ್ರಿಯೆಗಳು",rt:"ಇತ್ತೀಚಿನ ವ್ಯವಹಾರಗಳು",sa:"ಎಲ್ಲ ನೋಡಿ",ant:"ನೋವಾ AI ಮುನ್ಸೂಚನೆ",ev:"ಆರ್ಥಿಕ ಆರೋಗ್ಯ",an:"AI ವಿಶ್ಲೇಷಣೆ",lt:"ಪೆಹ್ಲಾ ಕದಮ್ ಲೈಟ್",login:"ಸುರಕ್ಷಿತ ಲಾಗಿನ್",mob:"ಮೊಬೈಲ್ ಸಂಖ್ಯೆ",mpin:"MPIN",otp:"OTP ನಮೂದಿಸಿ",face:"ಮುಖ ID",fng:"ಬೆರಳಚ್ಚು",si:"ಸೈನ್ ಇನ್",welcome:"ನಮಸ್ಕಾರ! ಹೇಗೆ ಸಹಾಯ ಮಾಡಲಿ?",save:"ಉಳಿತಾಯ ಮಾಡಿ",bills:"ಬಿಲ್ ಪಾವತಿ",loan:"ಸಾಲ ಅರ್ಹತೆ ತಪಾಸಣೆ"},
+  malayalam:{g:"നമസ്കാരം,",sav:"സേവിംഗ്സ് അക്കൗണ്ട് ബാലൻസ്",acc:"അക്കൗണ്ട്",send:"പണം അയക്കുക",fd:"ഫിക്സഡ് ഡെപ്പോസിറ്റ്",wel:"ആരോഗ്യ സ്കോർ",nova_q:"ഇന്ന് നിങ്ങളുടെ ഏറ്റവും വലിയ പണ ആശങ്ക എന്താണ്?",ph:"നിങ്ങളുടെ ആശങ്ക ടൈപ്പ് ചെയ്യൂ...",qa:"ദ്രുത പ്രവർത്തനങ്ങൾ",rt:"സമീപകാല ഇടപാടുകൾ",sa:"എല്ലാം കാണൂ",ant:"നോവ AI പ്രവചനം",ev:"സാമ്പത്തിക ആരോഗ്യം",an:"AI വിശകലനം",lt:"പേഹ്ല കദം ലൈറ്റ്",login:"സുരക്ഷിത ലോഗിൻ",mob:"മൊബൈൽ നമ്പർ",mpin:"MPIN",otp:"OTP നൽകുക",face:"ഫേസ് ID",fng:"വിരലടയാളം",si:"സൈൻ ഇൻ",welcome:"നമസ്കാരം! എങ്ങനെ സഹായിക്കാം?",save:"സേവ് ചെയ്യുക",bills:"ബിൽ അടയ്ക്കുക",loan:"വായ്പ അർഹത പരിശോധിക്കുക"},
+  odia:{g:"ନମସ୍କାର,",sav:"ସଞ୍ଚୟ ଖାତା ଶେଷ",acc:"ଖାତା",send:"ଟଙ୍କା ପଠାନ୍ତୁ",fd:"ସ୍ଥାୟୀ ଜମା",wel:"ୱେଲ୍ନେସ ସ୍କୋର",nova_q:"ଆଜି ଆପଣଙ୍କ ସବୁଠୁ ବଡ ଟଙ୍କା ଚିନ୍ତା କ'ଣ?",ph:"ଆପଣଙ୍କ ଚିନ୍ତା ଟାଇପ୍ କରନ୍ତୁ...",qa:"ତ୍ୱରିତ କ୍ରିୟା",rt:"ସଦ୍ୟ ଲେଣଦେଣ",sa:"ସବୁ ଦେଖ",ant:"ନୋଭା AI ପ୍ରତ୍ୟାଶା",ev:"ଆର୍ଥିକ ସ୍ୱାସ୍ଥ୍ୟ",an:"AI ବିଶ୍ଳେଷଣ",lt:"ପ୍ରଥମ ପଦ ଲାଇଟ",login:"ସୁରକ୍ଷିତ ଲଗ ଇନ",mob:"ମୋବାଇଲ ନମ୍ବର",mpin:"MPIN",otp:"OTP ଦିଅ",face:"ଫେସ ID",fng:"ଆଙ୍ଗୁଳ ଛାପ",si:"ସାଇନ ଇନ",welcome:"ନମସ୍କାର! ମୁଁ କିପରି ସାହାଯ୍ୟ କରିପାରିବି?",save:"ସଞ୍ଚୟ କରନ୍ତୁ",bills:"ବିଲ ଦିଅ",loan:"ଋଣ ଯୋଗ୍ୟତା ଯାଞ୍ଚ"},
+  urdu:{g:"آداب،",sav:"بچت کھاتے کا بیلنس",acc:"کھاتہ",send:"پیسے بھیجیں",fd:"مقررہ ودیعت",wel:"ویلنس اسکور",nova_q:"آج آپ کی سب سے بڑی پیسے کی فکر کیا ہے؟",ph:"اپنی فکر لکھیں...",qa:"فوری اقدامات",rt:"حالیہ لین دین",sa:"سب دیکھیں",ant:"نووا AI اندازہ",ev:"مالی صحت",an:"AI تجزیہ",lt:"پہلا قدم لائٹ",login:"محفوظ لاگ ان",mob:"موبائل نمبر",mpin:"MPIN",otp:"OTP درج کریں",face:"فیس ID",fng:"انگلی کا نشان",si:"سائن ان",welcome:"آداب! میں کس طرح مدد کر سکتا ہوں؟",save:"بچت کریں",bills:"بل ادا کریں",loan:"قرض اہلیت چیک کریں"},
+};
+const LANGS=["English","Hindi","Assamese","Bengali","Tamil","Telugu","Marathi","Gujarati","Punjabi","Kannada","Malayalam","Odia","Urdu"];
+const LKEYS=["english","hindi","assamese","bengali","tamil","telugu","marathi","gujarati","punjabi","kannada","malayalam","odia","urdu"];
+const TXNS=[
+  {id:1,name:"Salary Credit",meta:"Today, 11:56 AM \u2022 NEFT",amount:"+\u20b950,000",type:"credit",icon:"\uD83D\uDCBC"},
+  {id:2,name:"Big Bazaar",meta:"Yesterday, 8:32 PM \u2022 UPI",amount:"-\u20b92,340",type:"debit",icon:"\uD83D\uDED2"},
+  {id:3,name:"SBI Life Premium",meta:"Jun 20 \u2022 Auto-debit",amount:"-\u20b94,200",type:"debit",icon:"\uD83D\uDEE1\uFE0F"},
+  {id:4,name:"NEFT Transfer",meta:"Jun 19 \u2022 NEFT",amount:"+\u20b915,000",type:"credit",icon:"\uD83C\uDFE6"},
+  {id:5,name:"Swiggy",meta:"Jun 18 \u2022 UPI",amount:"-\u20b9342",type:"debit",icon:"\uD83C\uDF54"},
+  {id:6,name:"ATM Withdrawal",meta:"Jun 17 \u2022 ATM",amount:"-\u20b92,000",type:"debit",icon:"\uD83C\uDFE7"},
+];
+const SPEND=[{m:"Jan",v:28},{m:"Feb",v:24},{m:"Mar",v:31},{m:"Apr",v:27},{m:"May",v:35},{m:"Jun",v:42}];
+const CATS=[
+  {name:"Food & Dining",pct:32,amt:"\u20b913,440",color:"#00b4d8"},
+  {name:"Shopping",pct:24,amt:"\u20b910,080",color:"#48cae4"},
+  {name:"Bills",pct:18,amt:"\u20b97,560",color:"#0077b6"},
+  {name:"Travel",pct:14,amt:"\u20b95,880",color:"#0096c7"},
+  {name:"Entertainment",pct:12,amt:"\u20b95,040",color:"#023e8a"},
+];
+const WORRIES=[
+  {label:"Idle savings",pct:34,color:"#00b4d8"},{label:"Tax saving",pct:28,color:"#48cae4"},
+  {label:"Loan eligibility",pct:22,color:"#0077b6"},{label:"Pension credit",pct:18,color:"#0096c7"},
+  {label:"Insurance due",pct:14,color:"#023e8a"},{label:"Low balance",pct:12,color:"#90e0ef"},
+];
+function AreaSVG(){
+  const W=290,H=160,pl=36,pb=28,pt=8,pr=8,IW=W-pl-pr,IH=H-pb-pt;
+  const maxV=Math.max(...SPEND.map(d=>d.v)),minV=Math.min(...SPEND.map(d=>d.v)),rng=maxV-minV||1;
+  const pts=SPEND.map((d,i)=>[pl+(i/(SPEND.length-1))*IW,pt+IH-((d.v-minV)/rng)*IH]);
+  const line=pts.map((p,i)=>(i?"L":"M")+p[0].toFixed(1)+","+p[1].toFixed(1)).join(" ");
+  const area=line+" L"+pts[pts.length-1][0].toFixed(1)+","+(pt+IH)+" L"+pts[0][0].toFixed(1)+","+(pt+IH)+" Z";
+  return React.createElement("svg",{width:"100%",viewBox:"0 0 "+W+" "+H,style:{display:"block"}},
+    React.createElement("defs",null,React.createElement("linearGradient",{id:"ag",x1:"0",y1:"0",x2:"0",y2:"1"},React.createElement("stop",{offset:"0%",stopColor:"#00b4d8",stopOpacity:.38}),React.createElement("stop",{offset:"100%",stopColor:"#00b4d8",stopOpacity:0}))),
+    SPEND.map((d,i)=>React.createElement("text",{key:i,x:pts[i][0],y:H-6,textAnchor:"middle",fill:"rgba(255,255,255,0.32)",fontSize:9},d.m)),
+    React.createElement("path",{d:area,fill:"url(#ag)"}),
+    React.createElement("path",{d:line,fill:"none",stroke:"#00b4d8",strokeWidth:2,strokeLinecap:"round",strokeLinejoin:"round"}),
+    pts.map((p,i)=>React.createElement("circle",{key:i,cx:p[0],cy:p[1],r:3.5,fill:"#00b4d8",stroke:"#050a14",strokeWidth:2}))
+  );
+}
+function BarSVG({data}){
+  const W=270,H=140,pl=8,pb=22,pt=10,pr=8,IW=W-pl-pr,IH=H-pb-pt;
+  const maxV=Math.max(...data.map(d=>d.pct))||1;
+  const bw=Math.max(14,Math.floor(IW/data.length*.55)),gap=IW/data.length;
+  const cols=["#00b4d8","#48cae4","#0077b6","#0096c7","#023e8a","#90e0ef"];
+  return React.createElement("svg",{width:"100%",viewBox:"0 0 "+W+" "+H,style:{display:"block"}},
+    data.map((d,i)=>{
+      const x=pl+i*gap+(gap-bw)/2,bh=Math.max(4,(d.pct/maxV)*IH),y=pt+IH-bh;
+      return React.createElement("g",{key:i},
+        React.createElement("rect",{x,y,width:bw,height:bh,fill:cols[i%cols.length],rx:4}),
+        React.createElement("text",{x:x+bw/2,y:H-5,textAnchor:"middle",fill:"rgba(255,255,255,0.38)",fontSize:8},d.region||d.label||d.m||""),
+        React.createElement("text",{x:x+bw/2,y:y-3,textAnchor:"middle",fill:"rgba(255,255,255,0.65)",fontSize:8},d.pct+"%")
+      );
+    })
+  );
+}
+function DonutSVG(){
+  const sz=140,cx=70,cy=70,r=50,ir=30;
+  const total=CATS.reduce((a,d)=>a+d.pct,0);let angle=-Math.PI/2;
+  const slices=CATS.map(d=>{
+    const sw=(d.pct/total)*2*Math.PI,x1=cx+r*Math.cos(angle),y1=cy+r*Math.sin(angle),x2=cx+r*Math.cos(angle+sw),y2=cy+r*Math.sin(angle+sw),ix1=cx+ir*Math.cos(angle),iy1=cy+ir*Math.sin(angle),ix2=cx+ir*Math.cos(angle+sw),iy2=cy+ir*Math.sin(angle+sw),lg=sw>Math.PI?1:0;
+    const path="M"+ix1.toFixed(1)+","+iy1.toFixed(1)+" L"+x1.toFixed(1)+","+y1.toFixed(1)+" A"+r+","+r+" 0 "+lg+" 1 "+x2.toFixed(1)+","+y2.toFixed(1)+" L"+ix2.toFixed(1)+","+iy2.toFixed(1)+" A"+ir+","+ir+" 0 "+lg+" 0 "+ix1.toFixed(1)+","+iy1.toFixed(1)+" Z";
+    angle+=sw;return{path,color:d.color};
+  });
+  return React.createElement("div",{style:{display:"flex",alignItems:"center",gap:12}},
+    React.createElement("svg",{width:sz,height:sz,viewBox:"0 0 "+sz+" "+sz,style:{flexShrink:0}},
+      slices.map((s,i)=>React.createElement("path",{key:i,d:s.path,fill:s.color,stroke:"#050a14",strokeWidth:1.5})),
+      React.createElement("text",{x:cx,y:cy-3,textAnchor:"middle",fill:"#fff",fontSize:11,fontWeight:"700"},"\u20b942k"),
+      React.createElement("text",{x:cx,y:cy+11,textAnchor:"middle",fill:"rgba(255,255,255,0.45)",fontSize:8},"Spend")
+    ),
+    React.createElement("div",{style:{flex:1}},CATS.map((c,i)=>React.createElement("div",{key:i,style:{display:"flex",alignItems:"center",gap:7,marginBottom:7}},React.createElement("div",{style:{width:8,height:8,borderRadius:"50%",background:c.color,flexShrink:0}}),React.createElement("span",{style:{fontSize:10,color:"rgba(255,255,255,0.6)",flex:1}},c.name.split(" ")[0]),React.createElement("span",{style:{fontSize:10,fontWeight:600,color:"#fff"}},c.pct+"%"))))
+  );
+}
+function classify(text){
+  const t=text.toLowerCase();
+  if(/idle|bekar|paisa.*pada|sitting/.test(t)) return{intent:"Idle Savings",confidence:94,action:"Open Best-Rate FD",why:["\u20b930,000 idle for 45+ days","Low risk profile","No FD in last 6 months","SBI FD 7.1% > savings 2.7%"]};
+  if(/tax|80c|elss/.test(t)) return{intent:"Tax Saving",confidence:91,action:"Open ELSS / Tax FD",why:["No 80C investment this year","\u20b91.5L limit not used","Q3 ending soon","Save up to \u20b946,800"]};
+  if(/loan|borrow|emi/.test(t)) return{intent:"Loan Query",confidence:88,action:"Check Pre-approved Eligibility",why:["CIBIL 762 (Good)","Regular salary credits","No active EMI","Eligible up to \u20b95L"]};
+  if(/pension|retire/.test(t)) return{intent:"Pension Query",confidence:96,action:"Check Pension Credit Status",why:["Expected pension: 7th","Today 8th — not credited","Previous 3 months regular","Will flag SPARSH portal"]};
+  if(/save|bachat|invest|saving/.test(t)) return{intent:"Savings Goal",confidence:89,action:"Set up RD or SIP",why:["Savings rate only 2.7%","\u20b9500/month RD at 6.8%","SIP starting \u20b9500","Earns \u20b96,500 extra/year"]};
+  if(/insurance|bima/.test(t)) return{intent:"Insurance Need",confidence:85,action:"View SBI Life Options",why:["No term insurance detected","Life stage: First Job","\u20b950L term at \u20b9420/month","Critical illness rider available"]};
+  return{intent:"General Query",confidence:72,action:"Connect to Human Advisor",why:["Query needs human context","First-time query pattern","Advisor has your full profile","Available 8AM\u20138PM"]};
+}
+const CE=React.createElement;
+
+/* ── SCREENS ── */
+function LangScreen({onLang}){
+  const[sel,setSel]=useState("English");
+  const svcs=[{t:"FOUNDATION",i:["SBI Savings Account","Zero balance option","Passbook & Debit Card"]},{t:"SOLUTION",i:["RD, FD & SIP","Insurance cover","Loan eligibility"]},{t:"DIGIT-ALL",i:["YONO banking","Voice & WhatsApp","AI companion Nova"]}];
+  return CE("div",{className:"screen bg-lang"},
+    CE("div",{style:{position:"absolute",top:-60,right:-60,width:220,height:220,background:"linear-gradient(135deg,#0077b6,#00b4d8,#48cae4)",borderRadius:"60% 40% 50% 70%/50% 60% 40% 60%",animation:"morph 8s ease-in-out infinite",opacity:.6,zIndex:1,pointerEvents:"none"}}),
+    CE("div",{style:{position:"absolute",bottom:200,left:-90,width:240,height:240,background:"linear-gradient(135deg,#023e8a,#0077b6)",borderRadius:"60% 40% 50% 70%/50% 60% 40% 60%",animation:"morph 10s ease-in-out infinite",animationDelay:"-3s",opacity:.38,zIndex:1,pointerEvents:"none"}}),
+    CE("div",{style:{padding:"56px 24px 0",textAlign:"center",position:"relative",zIndex:2}},
+      CE("div",{className:"yono-logo"},"YONO SBI"),
+      CE("div",{style:{fontSize:13,color:"rgba(255,255,255,0.6)",marginTop:4}},"Grow your ",CE("b",{style:{color:"#fff"}},"presence.")," \u2014 PEHLA KADAM 2.0")
+    ),
+    CE("div",{style:{padding:"28px 24px 0",position:"relative",zIndex:2}},
+      CE("div",{style:{fontSize:20,fontWeight:600,color:"#fff",marginBottom:2}},"Choose your preferred language"),
+      CE("div",{style:{fontSize:13,color:"rgba(255,255,255,0.55)",marginBottom:20}},"\u0905\u092a\u0928\u0940 \u092d\u093e\u0937\u093e \u091a\u0941\u0928\u0947\u0902"),
+      CE("div",{className:"lang-grid"},LANGS.map(l=>CE("button",{key:l,className:"lang-btn"+(sel===l?" sel":""),onClick:()=>setSel(l)},l.toUpperCase()))),
+      CE("div",{style:{marginTop:18}},
+        CE("div",{style:{fontSize:14,fontWeight:600,color:"#fff",marginBottom:4}},"Our services"),
+        CE("div",{style:{fontSize:11,color:"rgba(255,255,255,0.5)",marginBottom:12}},"AI agentic services for every Indian"),
+        CE("div",{className:"svc-grid"},svcs.map(s=>CE("div",{key:s.t,className:"svc-card"},CE("h4",null,s.t),CE("ul",null,s.i.map((it,i)=>CE("li",{key:i,className:"svc-li"},it))))))
+      ),
+      CE("button",{className:"btn-main",style:{marginTop:20},onClick:()=>onLang(LKEYS[LANGS.indexOf(sel)])},"Continue \u2192"),
+      CE("div",{style:{height:40}})
+    )
+  );
+}
+
+function LoginScreen({onLogin,t}){
+  const[step,setStep]=useState(0);
+  const[mobile,setMobile]=useState("");
+  const[mpin,setMpin]=useState("");
+  const[otp,setOtp]=useState(["","","","","",""]);
+  return CE("div",{className:"screen bg-login"},
+    CE("div",{className:"login-wrap"},
+      CE("div",{style:{marginBottom:32}},CE("div",{style:{fontSize:28,fontWeight:900,color:"#fff",marginBottom:4}},"SBI YONO"),CE("div",{style:{fontSize:13,color:"rgba(255,255,255,0.55)"}},["\uD83D\uDD12 ",t.login])),
+      CE("div",{className:"card su"},
+        step===0?CE("div",null,
+          CE("h2",null,"Welcome back"),CE("p",null,"Sign in to your account"),
+          CE("div",{className:"ig"},CE("label",null,t.mob),CE("input",{type:"tel",placeholder:"Enter 10-digit number",value:mobile,onChange:e=>setMobile(e.target.value),maxLength:10})),
+          CE("div",{className:"ig"},CE("label",null,t.mpin),CE("input",{type:"password",placeholder:"\u2022\u2022\u2022\u2022",value:mpin,onChange:e=>setMpin(e.target.value),maxLength:4})),
+          CE("div",{className:"bio-row"},CE("button",{className:"bio-btn"},"\uD83D\uDE0A \u00a0",t.face),CE("button",{className:"bio-btn"},"\uD83D\uDC46 \u00a0",t.fng)),
+          CE("button",{className:"btn-main",onClick:()=>setStep(1)},"Get OTP \u2192")
+        ):CE("div",null,
+          CE("h2",null,"Verify OTP"),CE("p",null,"OTP sent to "+mobile.slice(0,4)+"XXXXXX"),
+          CE("div",{className:"ig"},CE("label",null,t.otp),CE("div",{className:"otp-row"},otp.map((v,i)=>CE("input",{key:i,className:"otp-inp",type:"text",maxLength:1,value:v,onChange:e=>{const o=[...otp];o[i]=e.target.value.slice(-1);setOtp(o);}})))),
+          CE("button",{className:"btn-main",style:{marginTop:16},onClick:onLogin},t.si+" \u2192")
+        )
+      )
+    )
+  );
+}
+
+/* SCREEN 3 — WELCOME HOME (7-flow) */
+function WelcomeScreen({t,onStartFlow}){
+  const[activeChip,setActiveChip]=useState(null);
+  const chips=[{key:"save",label:t.save||"Save money",ico:"\uD83D\uDCB0"},{key:"bills",label:t.bills||"Pay bills",ico:"\uD83E\uDDFE"},{key:"loan",label:t.loan||"Check loan",ico:"\uD83C\uDFE6"}];
+  return CE("div",{className:"screen bg-welcome"},
+    CE("div",{style:{position:"absolute",top:-80,right:-80,width:260,height:260,background:"linear-gradient(135deg,rgba(255,255,255,.1),rgba(0,180,216,.15))",borderRadius:"60% 40% 50% 70%/50% 60% 40% 60%",animation:"morph 9s ease-in-out infinite",opacity:.5,pointerEvents:"none"}}),
+    CE("div",{className:"welcome-hero su"},
+      CE("div",{style:{fontSize:12,fontWeight:600,color:"rgba(255,255,255,.7)",letterSpacing:"1.5px",textTransform:"uppercase",marginBottom:8}},"\u2736 NOVA BY SBI"),
+      CE("h1",null,"PEHLA KADAM"),
+      CE("div",{className:"sub"},"India's AI Financial Life Companion.\nYour first step. Your language. Your pace."),
+      CE("div",{className:"trust-row"},
+        ["\uD83D\uDD12 Secure","\uD83E\uDDE0 Explainable","\u2705 Consent-based"].map(tc=>CE("div",{key:tc,className:"trust-chip"},tc))
+      )
+    ),
+    CE("div",{style:{padding:"0 20px 24px"}},
+      CE("div",{className:"assistant-card su"},
+        CE("div",{className:"assistant-greeting"},t.welcome||"Namaste! How can I help you today?"),
+        CE("div",{className:"assistant-sub"},"Tell me your money worry — I'll find the best next step for you."),
+        CE("div",{className:"assistant-input-row"},
+          CE("input",{className:"assistant-inp",placeholder:t.ph||"Type your worry...",onKeyDown:e=>{if(e.key==="Enter")onStartFlow("save");}}),
+          CE("button",{className:"voice-btn",onClick:()=>onStartFlow("save")},"\uD83C\uDF99\uFE0F")
+        ),
+        CE("div",{className:"chips-row"},chips.map(c=>CE("div",{key:c.key,className:"chip"+(activeChip===c.key?" active":""),onClick:()=>{setActiveChip(c.key);setTimeout(()=>onStartFlow(c.key),180);}},c.ico+" "+c.label)))
+      ),
+      CE("div",{className:"step-dots"},[0,1,2,3,4,5,6].map(i=>CE("div",{key:i,className:"sdot"+(i===0?" active":"")}))),
+      CE("div",{style:{marginTop:8}},
+        CE("button",{className:"btn-ghost",style:{width:"100%",borderRadius:50,padding:13,fontSize:13,fontWeight:600},onClick:()=>onStartFlow("dash")},"\u2192 Skip to Full Dashboard")
+      )
+    )
+  );
+}
+
+/* SCREEN 4 — INTENT / CHAT */
+function IntentScreen({onBack,onNext,chipKey,t}){
+  const[thinking,setThinking]=useState(false);
+  const msgs={save:"I want to save money.",bills:"I need to pay my bills.",loan:"Can I check my loan eligibility?"};
+  const msg=msgs[chipKey]||"I want to save money.";
+  useEffect(()=>{const ti=setTimeout(()=>setThinking(true),900);return()=>clearTimeout(ti);},[]);
+  return CE("div",{className:"screen bg-nova",style:{display:"flex",flexDirection:"column",height:"100%"}},
+    CE("div",{className:"chat-hdr"},
+      CE("div",{className:"back-btn",onClick:onBack},"\u2190"),
+      CE("div",null,CE("div",{style:{fontSize:16,fontWeight:700,color:"#fff"}},"Nova AI"),CE("div",{style:{fontSize:11,color:"#00b4d8"}},"\u25cf Online"))
+    ),
+    CE("div",{className:"chat-flow"},
+      CE("div",{className:"lang-note"},"\uD83C\uDF10 Nova understands 13 Indian languages",CE("div",{className:"lang-flags"},["Hindi","Tamil","Assamese","Bengali","Telugu","Marathi","Gujarati","Punjabi","Kannada","Malayalam"].map(l=>CE("span",{key:l,className:"flag-chip"},l)))),
+      CE("div",{className:"msg-wrap user"},CE("div",{className:"bubble user"},msg)),
+      thinking&&CE("div",{className:"fi"},
+        CE("div",{className:"msg-wrap"},CE("div",{className:"bubble ai"},CE("span",{className:"tdot",style:{animationDelay:"0s"}}),CE("span",{className:"tdot",style:{animationDelay:"0.2s"}}),CE("span",{className:"tdot",style:{animationDelay:"0.4s"}}))),
+        CE("div",{className:"thinking-card"},CE("div",{className:"thinking-top"},CE("div",{className:"thinking-dot"}),CE("span",{className:"thinking-label"},"Processing your query")),CE("div",{className:"thinking-bar"},CE("div",{className:"thinking-fill"}))),
+        CE("div",{className:"msg-wrap"},CE("div",{className:"bubble ai"},"I understand. Let me find the best option for you \uD83D\uDC4D"))
+      )
+    ),
+    CE("div",{className:"step-dots"},[0,1,2,3,4,5,6].map(i=>CE("div",{key:i,className:"sdot"+(i===1?" active":"")}))),
+    thinking&&CE("div",{style:{padding:"0 16px 24px"}},CE("button",{className:"btn-main",onClick:onNext},"See Recommendation \u2192"))
+  );
+}
+
+/* SCREEN 5 — RECOMMENDATION */
+function RecommendScreen({onBack,onNext,onWhy}){
+  return CE("div",{className:"screen bg-dark"},
+    CE("div",{className:"scrn-hdr"},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("h2",null,"Nova's Recommendation")),
+    CE("div",{className:"screen-pad"},
+      CE("div",{className:"rec-card su"},
+        CE("div",{className:"rec-badge"},"\u2705 HIGH CONFIDENCE"),
+        CE("div",{className:"rec-icon"},"\uD83C\uDFE6"),
+        CE("div",{className:"rec-title"},"Open a Recurring Deposit"),
+        CE("div",{className:"rec-desc"},"Based on your account activity, starting a \u20b91,000/month RD is the best way to grow your idle savings safely and steadily."),
+        CE("div",{className:"rec-meta"},
+          CE("div",{className:"rec-meta-item"},CE("div",{className:"rec-meta-label"},"Rate"),CE("div",{className:"rec-meta-val"},"6.8%")),
+          CE("div",{className:"rec-meta-item"},CE("div",{className:"rec-meta-label"},"Duration"),CE("div",{className:"rec-meta-val"},"12 mo")),
+          CE("div",{className:"rec-meta-item"},CE("div",{className:"rec-meta-label"},"Return"),CE("div",{className:"rec-meta-val"},"\u20b913,249"))
+        )
+      ),
+      CE("button",{className:"btn-ghost",style:{width:"100%",borderRadius:50,padding:13,marginTop:14,marginBottom:10,fontSize:13,fontWeight:600},onClick:onWhy},"\uD83D\uDD0D Why am I seeing this?"),
+      CE("div",{className:"step-dots"},[0,1,2,3,4,5,6].map(i=>CE("div",{key:i,className:"sdot"+(i===2?" active":"")}))),
+      CE("button",{className:"btn-main",onClick:onNext},"Continue \u2192"),
+      CE("div",{className:"spacer"})
+    )
+  );
+}
+
+/* SCREEN 6 — WHY */
+function WhyScreen({onBack,onNext}){
+  const reasons=[
+    {title:"Your account has idle balance",body:"You have \u20b930,000 sitting in your savings account earning only 2.7% interest."},
+    {title:"Salary was credited recently",body:"\u20b950,000 was credited on Jun 24. This is a great time to put some aside."},
+    {title:"Matches your goal to save money",body:"You asked Nova to help you save. An RD is low-risk, disciplined, and guaranteed."},
+  ];
+  return CE("div",{className:"screen bg-dark"},
+    CE("div",{className:"scrn-hdr"},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("h2",null,"Why This Suggestion?")),
+    CE("div",{className:"screen-pad"},
+      CE("div",{className:"trust-banner"},CE("span",{style:{fontSize:20}},"\uD83D\uDEE1\uFE0F"),CE("div",{className:"trust-text"},"PEHLA KADAM is fully transparent. Every recommendation has a clear reason. No hidden sales motives.")),
+      reasons.map((r,i)=>CE("div",{key:i,className:"why-reason su",style:{animationDelay:(i*.1)+"s"}},
+        CE("div",{className:"why-num"},i+1),CE("div",{className:"why-text-wrap"},CE("h4",null,r.title),CE("p",null,r.body))
+      )),
+      CE("div",{className:"insight-box",style:{marginTop:14,marginLeft:0,marginRight:0}},
+        CE("div",{className:"insight-lbl"},"\uD83E\uDDE0 Confidence Meter"),
+        CE("div",{style:{height:8,background:"rgba(255,255,255,.09)",borderRadius:4,overflow:"hidden",marginTop:6}},CE("div",{style:{height:"100%",width:"89%",background:"linear-gradient(90deg,#0077b6,#00b4d8)",borderRadius:4}})),
+        CE("div",{style:{display:"flex",justifyContent:"space-between",marginTop:4}},CE("span",{style:{fontSize:10,color:"rgba(255,255,255,.4)"}},"Low"),CE("span",{style:{fontSize:11,fontWeight:700,color:"#00b4d8"}},"89% — High Confidence"),CE("span",{style:{fontSize:10,color:"rgba(255,255,255,.4)"}},"High"))
+      ),
+      CE("div",{className:"step-dots"},[0,1,2,3,4,5,6].map(i=>CE("div",{key:i,className:"sdot"+(i===3?" active":"")}))),
+      CE("button",{className:"btn-main",style:{marginTop:6},onClick:onNext},"Proceed with RD \u2192"),
+      CE("div",{className:"spacer"})
+    )
+  );
+}
+
+/* SCREEN 7 — CONSENT */
+function ConsentScreen({onBack,onConfirm}){
+  return CE("div",{className:"screen bg-dark"},
+    CE("div",{className:"scrn-hdr"},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("h2",null,"Review & Confirm")),
+    CE("div",{className:"secure-badge"},CE("span",null,"\uD83D\uDD12"),CE("span",null," Secure transaction. Your consent is required before anything happens.")),
+    CE("div",{className:"consent-card su"},
+      CE("div",{className:"consent-header"},CE("h3",null,"Recurring Deposit \u2014 SBI"),CE("p",null,"Please review the details below before confirming")),
+      CE("div",{className:"consent-body"},
+        [{l:"Action",v:"Open Recurring Deposit"},{l:"Monthly Amount",v:"\u20b91,000"},{l:"Duration",v:"12 months"},{l:"Interest Rate",v:"6.8% per annum"},{l:"Total Investment",v:"\u20b912,000"},{l:"Maturity Amount",v:"\u20b913,249",g:true},{l:"Interest Earned",v:"+\u20b91,249",g:true},{l:"Start Date",v:"Jun 25, 2026"},{l:"Auto-debit",v:"25th every month"}].map((row,i)=>
+          CE("div",{key:i,className:"consent-row"},CE("span",{className:"consent-label"},row.l),CE("span",{className:"consent-value"+(row.g?" green":"")},row.v))
+        )
+      )
+    ),
+    CE("div",{className:"step-dots"},[0,1,2,3,4,5,6].map(i=>CE("div",{key:i,className:"sdot"+(i===4?" active":"")}))),
+    CE("div",{style:{padding:"12px 16px 0",display:"grid",gridTemplateColumns:"1fr 1fr",gap:10}},
+      CE("button",{className:"btn-main btn-ghost",style:{width:"100%"},onClick:onBack},"\u2190 No, Go Back"),
+      CE("button",{className:"btn-main btn-success",style:{width:"100%"},onClick:onConfirm},"\u2714 Yes, Continue")
+    ),
+    CE("div",{className:"spacer"})
+  );
+}
+
+/* SCREEN 8 — SUCCESS */
+function SuccessScreen({onGrowth,onDash}){
+  return CE("div",{className:"screen bg-success"},
+    CE("div",{className:"success-scr su"},
+      CE("div",{className:"success-icon-wrap"},"\u2714"),
+      CE("div",{className:"success-title"},"RD Created Successfully!"),
+      CE("div",{className:"success-sub"},"Your Recurring Deposit of \u20b91,000/month has been set up.\nFirst deduction: Jun 25, 2026."),
+      CE("div",{className:"success-detail-card"},
+        [{l:"Account",v:"XXXX XXXX 4821"},{l:"RD Number",v:"RD\u20224821096"},{l:"Monthly Debit",v:"\u20b91,000"},{l:"Maturity Date",v:"Jun 25, 2027"},{l:"Maturity Amount",v:"\u20b913,249",g:true}].map((row,i)=>
+          CE("div",{key:i,className:"success-detail-row"},CE("span",{className:"sdl"},row.l),CE("span",{className:"sdr"+(row.g?" g":"")},row.v))
+        )
+      ),
+      CE("div",{className:"step-dots",style:{marginBottom:16}},[0,1,2,3,4,5,6].map(i=>CE("div",{key:i,className:"sdot"+(i===5?" active":"")}))),
+      CE("div",{className:"next-actions"},
+        CE("button",{className:"btn-main",onClick:onGrowth},"\uD83D\uDCCA View Progress \u2192"),
+        CE("button",{className:"btn-main btn-ghost",style:{marginTop:0},onClick:onDash},"\uD83C\uDFE0 Go to Dashboard"),
+        CE("button",{className:"btn-main btn-ghost",style:{marginTop:0},onClick:onDash},"\uD83D\uDD2E Explore More Options")
+      )
+    )
+  );
+}
+
+/* SCREEN 9 — PHASE 2 GROWTH */
+function GrowthScreen({onBack,t}){
+  const[selStage,setSelStage]=useState(1);
+  const stages=["Student","First Job","Marriage","New Parent","Farmer","Business","Retirement"];
+  const sIcons=["\uD83C\uDF93","\uD83D\uDCBC","\uD83D\uDC91","\uD83D\uDC76","\uD83C\uDF3E","\uD83C\uDFED","\uD83D\uDC74"];
+  const sRecs=["Set \u20b9500/month RD. First savings habit compounds.","Open ELSS \u2014 save \u20b946,800 in taxes. Make your salary work.","Joint FD + Home Loan pre-approval. Build your nest.","SBI Child Plan + term cover. Secure their future.","KCC + PM Fasal Bima. Protect every crop cycle.","MSME loan + GST-linked credit. Grow boldly.","Senior FD 7.6% + Pension tracker. Peace of mind earned."];
+  const scoreItems=[{ico:"\uD83D\uDCB0",name:"Savings",val:82,color:"#00b4d8"},{ico:"\uD83D\uDCC8",name:"Investments",val:58,color:"#48cae4"},{ico:"\uD83D\uDEE1\uFE0F",name:"Insurance",val:65,color:"#0077b6"},{ico:"\uD83C\uDFE5",name:"Emergency Fund",val:45,color:"#0096c7"},{ico:"\uD83D\uDCB3",name:"Credit",val:88,color:"#023e8a"}];
+  const goals=[{name:"Emergency Fund",pct:45,color:"#00b4d8"},{name:"Home Down Payment",pct:23,color:"#0077b6"},{name:"Tax Saving 80C",pct:68,color:"#00d4a0"}];
+  const activities=[{ico:"\uD83C\uDFE6",cls:"blue",name:"FD Opened",time:"Today"},{ico:"\uD83D\uDCB0",cls:"green",name:"Salary Credited",time:"Today"},{ico:"\uD83D\uDEE1\uFE0F",cls:"orange",name:"Premium Due",time:"In 5 days"}];
+  const r=62,circ=2*Math.PI*r,fill=(72/100)*circ;
+  return CE("div",{className:"screen bg-growth"},
+    CE("div",{className:"growth-header"},
+      CE("div",{style:{display:"flex",alignItems:"center",gap:11}},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("div",null,CE("h2",null,"EVOLVE Dashboard"),CE("p",null,"Your financial wellness grows with you"))),
+      CE("div",{className:"growth-badge"},"\u23E9 Phase 2 Preview")
+    ),
+    CE("div",{className:"wellness-hero-card"},
+      CE("div",{className:"wh-top"},
+        CE("div",null,CE("div",{className:"wh-score"},"72"),CE("div",{className:"wh-label"},"Wellness Score / 100"),CE("div",{className:"pill",style:{marginTop:8}},"\uD83D\uDCC8 +8 this month")),
+        CE("div",{style:{position:"relative",width:72,height:72}},
+          CE("svg",{width:72,height:72,viewBox:"0 0 160 160"},
+            CE("defs",null,CE("linearGradient",{id:"sg2",x1:"0%",y1:"0%",x2:"100%",y2:"0%"},CE("stop",{offset:"0%",stopColor:"#0077b6"}),CE("stop",{offset:"100%",stopColor:"#00b4d8"}))),
+            CE("circle",{cx:80,cy:80,r,fill:"none",stroke:"rgba(255,255,255,0.07)",strokeWidth:18}),
+            CE("circle",{cx:80,cy:80,r,fill:"none",stroke:"url(#sg2)",strokeWidth:18,strokeLinecap:"round",strokeDasharray:fill+" "+circ,transform:"rotate(-90 80 80)"})
+          )
+        )
+      ),
+      CE("div",{style:{marginTop:14,position:"relative",zIndex:1}},
+        scoreItems.map((it,i)=>CE("div",{key:i,style:{display:"flex",alignItems:"center",gap:8,marginBottom:8}},
+          CE("span",{style:{fontSize:14}},it.ico),CE("span",{style:{flex:1,fontSize:11,color:"rgba(255,255,255,.65)"}},it.name),
+          CE("div",{className:"si-bar"},CE("div",{className:"si-fill",style:{width:it.val+"%",background:it.color,"--pw":it.val+"%"}})),
+          CE("span",{style:{fontSize:11,fontWeight:600,color:"#00b4d8",minWidth:24}},it.val)
+        ))
+      )
+    ),
+    CE("div",{className:"growth-section"},
+      CE("div",{className:"growth-card"},
+        CE("div",{className:"growth-card-title"},"Life Stage Engine"),
+        CE("div",{className:"stage-grid",style:{marginTop:0}},stages.map((s,i)=>CE("div",{key:i,className:"stage-card"+(selStage===i?" active":""),onClick:()=>setSelStage(i)},CE("div",{style:{fontSize:20,marginBottom:4}},sIcons[i]),CE("div",{style:{fontSize:9,fontWeight:600,color:"rgba(255,255,255,.55)",textTransform:"uppercase",letterSpacing:".5px"}},s)))),
+        CE("div",{className:"insight-box",style:{marginTop:12,marginLeft:0,marginRight:0}},CE("div",{className:"insight-lbl"},"Nova for "+stages[selStage]),CE("p",null,sRecs[selStage]))
+      ),
+      CE("div",{className:"growth-card"},
+        CE("div",{className:"growth-card-title"},"Goal Progress"),
+        goals.map((g,i)=>CE("div",{key:i,className:"goal-item"},CE("div",{className:"goal-label-row"},CE("span",{className:"goal-name"},g.name),CE("span",{className:"goal-pct"},g.pct+"%")),CE("div",{className:"goal-track"},CE("div",{className:"goal-fill",style:{width:g.pct+"%",background:g.color,"--pw":g.pct+"%"}}))))
+      ),
+      CE("div",{className:"growth-card"},
+        CE("div",{className:"growth-card-title"},"Recent Activity"),
+        activities.map((a,i)=>CE("div",{key:i,className:"activity-item"},CE("div",{className:"act-ico "+a.cls},a.ico),CE("span",{className:"act-name"},a.name),CE("span",{className:"act-time"},a.time)))
+      ),
+      CE("div",{className:"growth-card"},
+        CE("div",{className:"growth-card-title"},"Suggested Next Best Action"),
+        CE("div",{className:"nba-card"},CE("div",{className:"nba-ico"},"\uD83C\uDF1F"),CE("div",{className:"nba-text"},CE("h4",null,"Start a Tax-saving FD"),CE("p",null,"80C limit unused. Save \u20b946,800 in taxes.")),CE("div",{className:"nba-arrow"},"\u203A"))
+      )
+    ),
+    CE("div",{className:"step-dots"},[0,1,2,3,4,5,6].map(i=>CE("div",{key:i,className:"sdot"+(i===6?" active":"")}))),
+    CE("div",{style:{height:90}})
+  );
+}
+
+/* MAIN DASHBOARD */
+function DashScreen({t,onNav}){
+  const ants=[
+    {type:"salary",ico:"\uD83D\uDCB0",title:"Salary Credited",body:"\u20b950,000 received. \u20b930,000 idle. Shall I move \u20b95,000 into an RD?",time:"Now",btns:["Yes, Set RD","Later"]},
+    {type:"alert",ico:"\u23F0",title:"FD Matures in 3 Days",body:"Your FD of \u20b91,00,000 matures June 25. Renew or transfer?",time:"2 mins ago",btns:["Renew FD","Transfer"]},
+    {type:"danger",ico:"\uD83D\uDCCA",title:"Spending Spike Detected",body:"You spent 20% more this month (\u20b942k vs \u20b935k). Breakdown?",time:"10 mins ago",btns:["View Analysis","Create Budget"]},
+  ];
+  return CE("div",{className:"screen bg-dash"},
+    CE("div",{className:"topnav"},
+      CE("div",null,CE("div",{className:"user-greet"},t.g),CE("div",{className:"user-name"},"Priya Sharma")),
+      CE("div",{className:"nav-right"},CE("div",{className:"notif-btn",onClick:()=>onNav("notif")},"\uD83D\uDD14",CE("div",{className:"ndot"})),CE("div",{className:"avatar"},"PS"))
+    ),
+    CE("div",{className:"bal-card su"},
+      CE("div",{className:"bal-label"},t.sav),CE("div",{className:"bal-amount"},"\u20b952,569.87"),
+      CE("div",{className:"bal-meta"},t.acc+": XXXX XXXX 4821 \u00b7 IFSC: SBIN0001234"),
+      CE("div",{className:"bal-actions"},
+        CE("div",{className:"bal-action",onClick:()=>onNav("transfer")},"\u2191 "+t.send),
+        CE("div",{className:"bal-action",onClick:()=>onNav("fd")},"\uD83C\uDFE6 "+t.fd),
+        CE("div",{className:"bal-action",onClick:()=>onNav("wellness")},"\uD83D\uDCCA "+t.wel)
+      )
+    ),
+    CE("div",{className:"nova-section su"},
+      CE("div",{className:"nova-badge"},CE("span",{className:"ndot2"}),CE("span",null,"\u2736 NOVA BY SBI  \u2022  AI FINANCIAL COMPANION")),
+      CE("div",{className:"nova-q"},t.nova_q),
+      CE("div",{className:"nova-row"},
+        CE("input",{className:"nova-input",placeholder:t.ph,onKeyDown:e=>{if(e.key==="Enter"&&e.target.value.trim())onNav("chat");}}),
+        CE("button",{className:"voice-btn",onClick:()=>onNav("chat")},"\uD83C\uDF99\uFE0F"),
+        CE("button",{className:"send-btn",onClick:()=>onNav("chat")},"\u2192")
+      )
+    ),
+    CE("div",{className:"sec"},
+      CE("div",{className:"sec-label"},t.qa),
+      CE("div",{className:"quick-grid"},[{ico:"\u2191",lbl:"SEND",nav:"transfer"},{ico:"\uD83C\uDFE6",lbl:"FD",nav:"fd"},{ico:"\uD83D\uDCC8",lbl:"INVEST",nav:"analytics"},{ico:"\uD83D\uDEE1\uFE0F",lbl:"INSURE",nav:"lite"}].map(q=>CE("div",{key:q.lbl,className:"quick-item",onClick:()=>onNav(q.nav)},CE("div",{className:"q-icon"},q.ico),CE("div",{className:"q-label"},q.lbl))))
+    ),
+    CE("div",{className:"sec"},
+      CE("div",{className:"sec-label"},t.ant),
+      ants.map((c,i)=>CE("div",{key:i,className:"a-card "+c.type},CE("div",{className:"a-top"},CE("div",{className:"a-ico "+c.type},c.ico),CE("div",{className:"a-time"},c.time)),CE("div",{className:"a-title"},c.title),CE("div",{className:"a-body"},c.body),CE("div",{className:"a-btns"},c.btns.map((b,j)=>CE("button",{key:j,className:"abtn "+(j===0?"p":"s")},b)))))
+    ),
+    CE("div",{className:"sec"},
+      CE("div",{className:"txn-hdr"},CE("div",{className:"sec-label"},t.rt),CE("div",{className:"see-all"},t.sa)),
+      CE("div",{className:"txn-card"},TXNS.slice(0,4).map(txn=>CE("div",{key:txn.id,className:"txn-item"},CE("div",{className:"txn-ico"},txn.icon),CE("div",{className:"txn-info"},CE("div",{className:"txn-name"},txn.name),CE("div",{className:"txn-meta"},txn.meta)),CE("div",{className:"txn-amt "+txn.type},txn.amount))))
+    ),
+    CE("div",{className:"spacer"})
+  );
+}
+
+function ChatScreen({onBack,t}){
+  const[msgs,setMsgs]=useState([{role:"ai",text:"\u2736 "+t.nova_q}]);
+  const[input,setInput]=useState("");
+  const[typing,setTyping]=useState(false);
+  const[whyOpen,setWhyOpen]=useState({});
+  const endRef=useRef();
+  useEffect(()=>{endRef.current&&endRef.current.scrollIntoView({behavior:"smooth"});},[msgs,typing]);
+  const send=()=>{
+    if(!input.trim())return;
+    const intent=classify(input);
+    setMsgs(m=>[...m,{role:"user",text:input}]);setInput("");setTyping(true);
+    setTimeout(()=>{setTyping(false);setMsgs(m=>[...m,{role:"ai",text:"I understand you're worried about "+intent.intent+". Confidence: "+intent.confidence+"%. Suggested: "+intent.action+".",intent}]);},1400);
+  };
+  return CE("div",{className:"screen bg-nova",style:{display:"flex",flexDirection:"column",height:"100%"}},
+    CE("div",{className:"chat-hdr"},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("div",null,CE("div",{style:{fontSize:16,fontWeight:700,color:"#fff"}},"Nova AI Assistant"),CE("div",{style:{fontSize:11,color:"#00b4d8"}},"\u25cf Online"))),
+    CE("div",{style:{flex:1,overflowY:"auto",padding:"6px 16px"}},
+      msgs.map((m,i)=>CE("div",{key:i,className:"msg-wrap"+(m.role==="user"?" user":"")},
+        CE("div",{className:"bubble "+m.role},m.text),
+        m.intent&&CE("div",{className:"intent-card"},
+          CE("div",{className:"irow"},CE("span",{className:"ilbl"},"Detected Intent"),CE("span",{className:"ival"},m.intent.intent)),
+          CE("div",{className:"irow"},CE("span",{className:"ilbl"},"Confidence"),CE("span",{className:"ival"},m.intent.confidence+"%")),
+          CE("div",{className:"conf-bar"},CE("div",{className:"conf-fill",style:{width:m.intent.confidence+"%"}})),
+          CE("span",{className:"pill-action",onClick:()=>setWhyOpen(w=>({...w,[i]:!w[i]}))},whyOpen[i]?"\u25b2 Hide":"\uD83D\uDD0D Why am I seeing this?"),
+          whyOpen[i]&&CE("div",{className:"why-box"},CE("div",{className:"why-title"},"Reason Engine"),m.intent.why.map((w,j)=>CE("div",{key:j,className:"why-item"},CE("span",{className:"why-chk"},"\u2713"),w))),
+          CE("div",{style:{display:"flex",gap:8,marginTop:10}},CE("button",{className:"abtn p",style:{fontSize:11}},m.intent.action),CE("button",{className:"abtn s",style:{fontSize:11}},"Later"))
+        )
+      )),
+      typing&&CE("div",{className:"msg-wrap"},CE("div",{className:"bubble ai"},CE("span",{className:"tdot",style:{animationDelay:"0s"}}),CE("span",{className:"tdot",style:{animationDelay:"0.2s"}}),CE("span",{className:"tdot",style:{animationDelay:"0.4s"}}))),
+      CE("div",{ref:endRef})
+    ),
+    CE("div",{className:"chat-input-bar"},CE("input",{className:"chat-inp",placeholder:t.ph,value:input,onChange:e=>setInput(e.target.value),onKeyDown:e=>e.key==="Enter"&&send()}),CE("button",{className:"chat-send",onClick:send},"\u2192"))
+  );
+}
+
+function WellnessScreen({onBack,t}){
+  const score=72;
+  const items=[{ico:"\uD83D\uDCB0",name:"Savings",val:82,color:"#00b4d8"},{ico:"\uD83D\uDCC8",name:"Investments",val:58,color:"#48cae4"},{ico:"\uD83D\uDEE1\uFE0F",name:"Insurance",val:65,color:"#0077b6"},{ico:"\uD83C\uDFE5",name:"Emergency Fund",val:45,color:"#0096c7"},{ico:"\uD83D\uDCB3",name:"Credit Health",val:88,color:"#023e8a"}];
+  const stages=["Student","First Job","Marriage","New Parent","Farmer","Business","Retirement"];
+  const sIcons=["\uD83C\uDF93","\uD83D\uDCBC","\uD83D\uDC91","\uD83D\uDC76","\uD83C\uDF3E","\uD83C\uDFED","\uD83D\uDC74"];
+  const sRecs=["Set \u20b9500/month RD.","Open ELSS \u2014 save \u20b946,800 in taxes.","Joint FD + Home Loan pre-approval.","SBI Child Plan + term insurance.","KCC + PM Fasal Bima.","MSME loan + GST-linked credit.","Senior FD 7.6% + Pension tracker."];
+  const[selStage,setSelStage]=useState(1);
+  const r=62,circ=2*Math.PI*r,fill=(score/100)*circ;
+  return CE("div",{className:"screen bg-dark"},
+    CE("div",{className:"scrn-hdr"},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("h2",null,t.ev)),
+    CE("div",{style:{textAlign:"center",padding:"0 16px 16px"}},
+      CE("div",{className:"score-ring"},
+        CE("svg",{width:160,height:160,viewBox:"0 0 160 160"},CE("defs",null,CE("linearGradient",{id:"sg",x1:"0%",y1:"0%",x2:"100%",y2:"0%"},CE("stop",{offset:"0%",stopColor:"#0077b6"}),CE("stop",{offset:"100%",stopColor:"#00b4d8"}))),CE("circle",{cx:80,cy:80,r,fill:"none",stroke:"rgba(255,255,255,0.07)",strokeWidth:14}),CE("circle",{cx:80,cy:80,r,fill:"none",stroke:"url(#sg)",strokeWidth:14,strokeLinecap:"round",strokeDasharray:fill+" "+circ,transform:"rotate(-90 80 80)"})),
+        CE("div",{className:"score-inner"},CE("div",{className:"score-num"},score),CE("div",{className:"score-lbl"},"/ 100"))
+      ),
+      CE("div",{className:"pill"},"\uD83D\uDCC8 +8 this month")
+    ),
+    CE("div",{className:"score-list"},items.map((it,i)=>CE("div",{key:i,className:"score-item"},CE("div",{className:"si-left"},CE("span",{style:{fontSize:17}},it.ico),CE("span",{style:{fontSize:13,fontWeight:500,color:"#fff"}},it.name)),CE("div",{className:"si-right"},CE("div",{className:"si-bar"},CE("div",{className:"si-fill",style:{width:it.val+"%",background:it.color,"--pw":it.val+"%"}})),CE("div",{className:"si-val"},it.val))))),
+    CE("div",{className:"sec"},CE("div",{className:"sec-label"},"Life Stage Engine"),CE("div",{className:"stage-grid"},stages.map((s,i)=>CE("div",{key:i,className:"stage-card"+(selStage===i?" active":""),onClick:()=>setSelStage(i)},CE("div",{style:{fontSize:20,marginBottom:4}},sIcons[i]),CE("div",{style:{fontSize:9,fontWeight:600,color:"rgba(255,255,255,.55)",textTransform:"uppercase",letterSpacing:".5px"}},s))))),
+    CE("div",{className:"insight-box",style:{margin:"12px 16px"}},CE("div",{className:"insight-lbl"},"Nova for "+stages[selStage]),CE("p",null,sRecs[selStage])),
+    CE("div",{className:"spacer"})
+  );
+}
+
+function AnalyticsScreen({onBack,t}){
+  const[tab,setTab]=useState(0);
+  const tabs=["Spending","Categories","Budget","AI Insights"];
+  const tips=["\uD83D\uDCA1 Open FD with \u20b930,000 idle \u2014 earn \u20b92,130 more/year","\uD83D\uDCA1 Set \u20b9500/month SIP after salary","\uD83D\uDCA1 SBI Life premium due in 5 days","\uD83D\uDCA1 80C limit unused \u2014 open ELSS or Tax FD"];
+  return CE("div",{className:"screen bg-dark"},
+    CE("div",{style:{display:"flex",alignItems:"center",gap:11,padding:"52px 20px 0"}},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("div",null,CE("div",{style:{fontSize:17,fontWeight:700,color:"#fff"}},t.an),CE("div",{style:{fontSize:11,color:"rgba(255,255,255,.45)",marginTop:2}},"AI-powered insights"))),
+    CE("div",{className:"atabs"},tabs.map((tb,i)=>CE("div",{key:i,className:"atab"+(tab===i?" active":""),onClick:()=>setTab(i)},tb))),
+    tab===0&&CE("div",null,CE("div",{className:"chart-box"},CE("div",{className:"chart-title"},"Monthly Spending"),CE(AreaSVG,null)),CE("div",{className:"insight-box"},CE("div",{className:"insight-lbl"},"Nova AI Insight"),CE("p",null,"June 20% above average. Spike in dining. Consider \u20b95,000 UPI cap."))),
+    tab===1&&CE("div",null,CE("div",{className:"chart-box"},CE("div",{className:"chart-title"},"Spend by Category"),CE(DonutSVG,null)),CE("div",{style:{padding:"0 16px"}},CATS.map((c,i)=>CE("div",{key:i,className:"cat-item"},CE("div",{className:"cat-dot",style:{background:c.color}}),CE("span",{style:{flex:1,fontSize:12,color:"#fff"}},c.name),CE("span",{style:{fontSize:11,color:"rgba(255,255,255,.45)",marginRight:8}},c.pct+"%"),CE("span",{style:{fontSize:12,fontWeight:600,color:"rgba(255,255,255,.65)"}},c.amt))))),
+    tab===2&&CE("div",{style:{padding:"0 16px"}},[{l:"Total Budget",v:"\u20b940,000",c:"rgba(255,255,255,.5)"},{l:"Spent",v:"\u20b942,000",c:"#ff4d6d"},{l:"Over Budget",v:"\u20b92,000",c:"#ff4d6d"}].map((row,i)=>CE("div",{key:i,style:{background:"rgba(255,255,255,.038)",border:"1px solid rgba(255,255,255,.07)",borderRadius:13,padding:13,marginBottom:9,display:"flex",justifyContent:"space-between",alignItems:"center"}},CE("span",{style:{fontSize:12,color:"rgba(255,255,255,.6)"}},row.l),CE("span",{style:{fontSize:16,fontWeight:700,color:row.c}},row.v)))),
+    tab===3&&CE("div",{style:{padding:"0 16px"}},tips.map((tip,i)=>CE("div",{key:i,className:"insight-box",style:{marginBottom:9}},CE("div",{className:"insight-lbl"},"Insight "+(i+1)),CE("p",null,tip)))),
+    CE("div",{className:"spacer"})
+  );
+}
+
+function FDScreen({onBack}){
+  const fdTypes=[{title:"Regular FD",rate:7.1,desc:"Standard term"},{title:"Tax Saving",rate:6.8,desc:"80C, 5yr lock"},{title:"Senior Citizen",rate:7.6,desc:"+0.5% for 60+"},{title:"SBI Annuity",rate:6.9,desc:"Monthly income"}];
+  const[selT,setSelT]=useState(0);const[amt,setAmt]=useState("100000");const[mnths,setMnths]=useState("12");
+  const p=parseFloat(amt)||0,n=parseInt(mnths)||12,rm=fdTypes[selT].rate/100/12,mat=p*Math.pow(1+rm,n);
+  return CE("div",{className:"screen bg-dark"},
+    CE("div",{className:"scrn-hdr"},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("h2",null,"Fixed Deposit")),
+    CE("div",{style:{padding:"0 16px"}},
+      CE("div",{className:"fd-type-grid"},fdTypes.map((f,i)=>CE("div",{key:i,className:"fd-type"+(selT===i?" sel":""),onClick:()=>setSelT(i)},CE("h4",null,f.title),CE("p",null,f.desc),CE("div",{className:"fd-rate"},f.rate+"%")))),
+      CE("div",{className:"fd-calc"},CE("div",{style:{fontSize:13,fontWeight:600,color:"#fff",marginBottom:14}},"\uD83E\uDDEE FD Calculator"),CE("label",{className:"fd-lbl"},"Principal (\u20b9)"),CE("input",{className:"fd-inp",type:"number",value:amt,onChange:e=>setAmt(e.target.value)}),CE("label",{className:"fd-lbl"},"Tenure (Months)"),CE("input",{className:"fd-inp",type:"number",value:mnths,onChange:e=>setMnths(e.target.value)}),
+        CE("div",{className:"fd-result"},[{l:"Principal",v:"\u20b9"+p.toLocaleString()},{l:"Interest Earned",v:"\u20b9"+Math.round(mat-p).toLocaleString(),h:true},{l:"Maturity Amount",v:"\u20b9"+Math.round(mat).toLocaleString()},{l:"Rate (p.a.)",v:fdTypes[selT].rate+"%"}].map((row,i)=>CE("div",{key:i,className:"fd-row"},CE("div",{className:"fd-rl"},row.l),CE("div",{className:"fd-rv"+(row.h?" hl":"")},row.v))))
+      ),
+      CE("button",{className:"btn-main"},"Open FD Now \u2192"),CE("div",{className:"spacer"})
+    )
+  );
+}
+
+function TransferScreen({onBack}){
+  const[step,setStep]=useState(0);const[method,setMethod]=useState(0);const[to,setTo]=useState("");const[amt,setAmt]=useState("");
+  const methods=["UPI","IMPS","NEFT","RTGS"];
+  return CE("div",{className:"screen bg-dark"},
+    CE("div",{className:"scrn-hdr"},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("h2",null,"Send Money")),
+    CE("div",{style:{padding:"0 16px"}},
+      step===0&&CE("div",null,CE("div",{className:"meth-tabs"},methods.map((m,i)=>CE("div",{key:i,className:"m-tab"+(method===i?" sel":""),onClick:()=>setMethod(i)},m))),CE("div",{className:"ig"},CE("label",null,method===0?"UPI ID / MOBILE":"ACCOUNT NUMBER"),CE("input",{type:"text",placeholder:method===0?"user@sbi":"Account Number",value:to,onChange:e=>setTo(e.target.value)})),CE("div",{className:"ig"},CE("label",null,"AMOUNT (\u20b9)"),CE("input",{type:"number",placeholder:"Enter amount",value:amt,onChange:e=>setAmt(e.target.value)})),CE("div",{className:"qamts"},["500","1000","5000","10000"].map(q=>CE("div",{key:q,className:"qamt",onClick:()=>setAmt(q)},"\u20b9"+parseInt(q).toLocaleString()))),CE("button",{className:"btn-main",onClick:()=>setStep(1)},"Continue \u2192")),
+      step===1&&CE("div",null,CE("div",{className:"txn-sum"},[{l:"To",v:to||"user@sbi"},{l:"Method",v:methods[method]},{l:"Amount",v:"\u20b9"+(parseFloat(amt)||0).toLocaleString()},{l:"Charges",v:"\u20b90"},{l:"Total Debit",v:"\u20b9"+(parseFloat(amt)||0).toLocaleString()}].map((row,i)=>CE("div",{key:i,className:"sum-row"},CE("span",{className:"sum-l"},row.l),CE("span",{className:"sum-r"},row.v)))),CE("div",{className:"warn-box"},"\u26a0\uFE0F SBI will never ask for your OTP."),CE("div",{className:"two-btn"},CE("button",{className:"btn-main btn-ghost",onClick:()=>setStep(0)},"\u2190 Edit"),CE("button",{className:"btn-main",onClick:()=>setStep(2)},"Confirm & Pay"))),
+      step===2&&CE("div",{style:{textAlign:"center",paddingTop:56}},CE("div",{style:{fontSize:60,marginBottom:14}},"\u2705"),CE("div",{style:{fontSize:20,fontWeight:700,color:"#fff",marginBottom:7}},"Transfer Successful!"),CE("div",{style:{fontSize:13,color:"rgba(255,255,255,.55)",marginBottom:22}},"\u20b9"+(parseFloat(amt)||0).toLocaleString()+" via "+methods[method]),CE("div",{className:"nova-nudge"},"\uD83D\uDCA1 Nova: \u20b925,000 idle. Want a high-yield FD?"),CE("button",{className:"btn-main",onClick:()=>setStep(0)},"New Transfer")),
+      CE("div",{className:"spacer"})
+    )
+  );
+}
+
+function NotifScreen({onBack}){
+  const notifs=[{ico:"\uD83D\uDCB0",type:"g",title:"Salary Credited",body:"\u20b950,000 received via NEFT",time:"11:56 AM today",isNew:true},{ico:"\u23F0",type:"y",title:"FD Matures in 3 Days",body:"Your \u20b91,00,000 FD matures June 25",time:"10:00 AM today",isNew:true},{ico:"\uD83D\uDCCA",type:"b",title:"Spending Alert",body:"Spent 20% more than last month",time:"9:30 AM today",isNew:true},{ico:"\uD83D\uDEE1\uFE0F",type:"y",title:"SBI Life Premium Due",body:"\u20b94,200 due in 5 days",time:"Yesterday"},{ico:"\uD83C\uDFAF",type:"b",title:"Tax Saving Reminder",body:"80C limit unused",time:"June 20"},{ico:"\u2705",type:"g",title:"RD Installment Deducted",body:"\u20b91,000 for RD account",time:"June 15"}];
+  return CE("div",{className:"screen bg-dark",style:{padding:"52px 16px 20px"}},
+    CE("div",{style:{display:"flex",alignItems:"center",gap:11,marginBottom:4}},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("div",{style:{fontSize:18,fontWeight:700,color:"#fff"}},"Notifications")),
+    CE("div",{style:{fontSize:12,color:"rgba(255,255,255,.45)",marginBottom:18}},"Smart alerts powered by Nova AI"),
+    notifs.map((n,i)=>CE("div",{key:i,className:"notif-item"},CE("div",{className:"n-ico "+n.type},n.ico),CE("div",{className:"n-info"},CE("div",{className:"n-title"},n.title),CE("div",{className:"n-body"},n.body),CE("div",{className:"n-time"},n.time)),n.isNew&&CE("div",{style:{width:8,height:8,background:"#00b4d8",borderRadius:"50%",flexShrink:0,marginTop:5}}))),
+    CE("div",{className:"spacer"})
+  );
+}
+
+function LiteScreen({onBack,t}){
+  const[expanded,setExpanded]=useState(null);
+  const channels=[{ico:"\uD83D\uDCDE",title:"Missed Call Banking",desc:"Missed call to 18004253800. Nova calls back in 30 sec.",tag:"No App Needed",type:"ivr"},{ico:"\uD83D\uDCAC",title:"WhatsApp Banking",desc:"Send 'Hi' to +91 9022690226. Full AI banking.",tag:"Zero Install",type:"wa"},{ico:"\uD83D\uDCF1",title:"SMS Banking",desc:"SMS 'BAL' to 09223766666. Any phone.",tag:"Feature Phone OK",type:null},{ico:"\uD83C\uDFE6",title:"Branch Kiosk",desc:"Walk in. PEHLA KADAM in 13 languages.",tag:"Rural Access",type:null}];
+  const waMsgs=[{out:false,text:"Namaste! Main NOVA hoon. Kya seva kar sakta hoon? \uD83D\uDE4F"},{out:true,text:"Mera balance batao"},{out:false,text:"\u2705 Savings: \u20b952,569.87\nAcc: XXXX4821 | IFSC: SBIN0001234"}];
+  const ivrSteps=["Customer calls 18004253800","Nova calls back in 30 sec","OTP verification","Ask query \u2014 balance, pension, FD","Action completed or escalated","Trust builds \u2192 YONO adoption"];
+  return CE("div",{className:"screen bg-dark"},
+    CE("div",{style:{padding:"52px 20px 14px"}},CE("div",{style:{display:"flex",alignItems:"center",gap:11,marginBottom:4}},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("div",{style:{fontSize:18,fontWeight:700,color:"#fff"}},t.lt)),CE("div",{style:{fontSize:12,color:"rgba(255,255,255,.45)"}},"No smartphone needed. AI banking for every Indian.")),
+    CE("div",{style:{padding:"0 16px"}},
+      channels.map((c,i)=>CE("div",{key:i,className:"ch-card",onClick:()=>setExpanded(expanded===i?null:i)},CE("div",{className:"ch-top"},CE("span",{style:{fontSize:26}},c.ico),CE("div",{className:"ch-title"},c.title)),CE("div",{className:"ch-desc"},c.desc),CE("div",{className:"ch-tag"},c.tag),
+        expanded===i&&c.type==="wa"&&CE("div",{className:"wa-mock"},waMsgs.map((m,j)=>CE("div",{key:j,className:"wa-msg"+(m.out?" out":"")},!m.out&&CE("div",{className:"wa-av"},"N"),CE("div",{className:"wa-bbl"+(m.out?" out":"")},m.text)))),
+        expanded===i&&c.type==="ivr"&&CE("div",{style:{marginTop:11}},ivrSteps.map((s,j)=>CE("div",{key:j,className:"ivr-step"},CE("div",{className:"ivr-n"},j+1),CE("div",{className:"ivr-t"},s))))
+      )),
+      CE("div",{className:"spacer"})
+    )
+  );
+}
+
+function AdminScreen({onBack}){
+  const aStats=[{lbl:"Active Users",val:"24.7L",sub:"\u2191 12% this week"},{lbl:"YONO Activations",val:"8.4L",sub:"\u2191 23% this month"},{lbl:"Nova Queries",val:"1.2Cr",sub:"\u2191 34% this week"},{lbl:"Avg Wellness",val:"68/100",sub:"\u2191 4 pts"}];
+  const regionData=[{region:"Bihar",pct:28},{region:"UP",pct:24},{region:"Raj",pct:20},{region:"MH",pct:18},{region:"TN",pct:14}];
+  return CE("div",{className:"screen bg-dark"},
+    CE("div",{style:{display:"flex",alignItems:"center",gap:11,padding:"52px 20px 0"}},CE("div",{className:"back-btn",onClick:onBack},"\u2190"),CE("div",null,CE("div",{style:{fontSize:17,fontWeight:700,color:"#fff"}},"Admin Insights"),CE("div",{style:{fontSize:11,color:"rgba(255,255,255,.45)",marginTop:2}},"Financial Worry Graph"))),
+    CE("div",{className:"admin-stats"},aStats.map((s,i)=>CE("div",{key:i,className:"stat-card"},CE("div",{className:"stat-lbl"},s.lbl),CE("div",{className:"stat-val"},s.val),CE("div",{className:"stat-sub"},s.sub)))),
+    CE("div",{style:{padding:"0 16px"}},
+      CE("div",{className:"worry-card"},CE("div",{style:{fontSize:12,fontWeight:600,color:"#fff",marginBottom:12}},"Top Financial Worries"),WORRIES.map((w,i)=>CE("div",{key:i},CE("div",{className:"w-lbl-row"},CE("span",{className:"w-lbl"},w.label),CE("span",{className:"w-val"},w.pct+"%")),CE("div",{className:"w-track"},CE("div",{className:"w-fill",style:{width:w.pct+"%",background:w.color,"--pw":w.pct+"%"}}))))),
+      CE("div",{className:"worry-card"},CE("div",{style:{fontSize:12,fontWeight:600,color:"#fff",marginBottom:12}},"Region-wise Worry Index"),CE(BarSVG,{data:regionData})),
+      CE("div",{className:"worry-card"},CE("div",{style:{fontSize:12,fontWeight:600,color:"#fff",marginBottom:12}},"Spend Distribution"),CE(DonutSVG,null))
+    ),
+    CE("div",{className:"spacer"})
+  );
+}
+
+/* ── MAIN APP ── */
+function App(){
+  const[screen,setScreen]=useState("lang");
+  const[lang,setLang]=useState("english");
+  const[navTab,setNavTab]=useState(0);
+  const[flowChip,setFlowChip]=useState("save");
+  const t=T[lang]||T.english;
+  const go=(s,tab)=>{setScreen(s);if(tab!=null)setNavTab(tab);};
+  const nav=(s)=>{
+    const map={transfer:"transfer",fd:"fd",analytics:"analytics",lite:"lite",chat:"chat",wellness:"wellness",notif:"notif",admin:"admin",dash:"dash"};
+    const tabs={analytics:3,lite:4,chat:1,wellness:2,dash:0};
+    go(map[s]||"dash",tabs[s]??null);
+  };
+  const startFlow=(chip)=>{if(chip==="dash"){go("dash",0);}else{setFlowChip(chip);go("flow_intent");}};
+  const flowScreens=["welcome","flow_intent","flow_rec","flow_why","flow_consent","flow_success","flow_growth"];
+  const showMainNav=!["lang","login",...flowScreens].includes(screen);
+  const showFlowBar=flowScreens.includes(screen);
+  const navItems=[{ico:"\uD83C\uDFE0",lbl:"HOME",tab:0,scr:"dash"},{ico:"\uD83D\uDCAC",lbl:"NOVA",tab:1,scr:"chat"},{ico:"\uD83D\uDCCA",lbl:"EVOLVE",tab:2,scr:"wellness"},{ico:"\uD83D\uDCC8",lbl:"ANALYTICS",tab:3,scr:"analytics"},{ico:"\u2630",lbl:"MORE",tab:4,scr:"lite"}];
+  return CE("div",{className:"app"},
+    screen==="lang"&&CE(LangScreen,{onLang:(l)=>{setLang(l);go("login");}}),
+    screen==="login"&&CE(LoginScreen,{onLogin:()=>go("welcome"),t}),
+    screen==="welcome"&&CE(WelcomeScreen,{t,onStartFlow:startFlow}),
+    screen==="flow_intent"&&CE(IntentScreen,{onBack:()=>go("welcome"),onNext:()=>go("flow_rec"),chipKey:flowChip,t}),
+    screen==="flow_rec"&&CE(RecommendScreen,{onBack:()=>go("flow_intent"),onNext:()=>go("flow_consent"),onWhy:()=>go("flow_why")}),
+    screen==="flow_why"&&CE(WhyScreen,{onBack:()=>go("flow_rec"),onNext:()=>go("flow_consent")}),
+    screen==="flow_consent"&&CE(ConsentScreen,{onBack:()=>go("flow_rec"),onConfirm:()=>go("flow_success")}),
+    screen==="flow_success"&&CE(SuccessScreen,{onGrowth:()=>go("flow_growth"),onDash:()=>go("dash",0)}),
+    screen==="flow_growth"&&CE(GrowthScreen,{onBack:()=>go("dash",0),t}),
+    screen==="dash"&&CE(DashScreen,{t,onNav:nav}),
+    screen==="chat"&&CE(ChatScreen,{onBack:()=>go("dash",0),t}),
+    screen==="wellness"&&CE(WellnessScreen,{onBack:()=>go("dash",0),t}),
+    screen==="analytics"&&CE(AnalyticsScreen,{onBack:()=>go("dash",0),t}),
+    screen==="fd"&&CE(FDScreen,{onBack:()=>go("dash",0)}),
+    screen==="transfer"&&CE(TransferScreen,{onBack:()=>go("dash",0)}),
+    screen==="notif"&&CE(NotifScreen,{onBack:()=>go("dash",0)}),
+    screen==="lite"&&CE(LiteScreen,{onBack:()=>go("dash",0),t}),
+    screen==="admin"&&CE(AdminScreen,{onBack:()=>go("dash",0)}),
+    showMainNav&&CE("div",{className:"bottom-nav"},
+      navItems.map((n,i)=>CE("div",{key:i,className:"nav-item"+(navTab===n.tab?" active":""),onClick:()=>{setNavTab(n.tab);setScreen(n.scr);}},CE("div",{className:"nav-icon"},n.ico),CE("div",{className:"nav-label"},n.lbl))),
+      CE("div",{className:"nav-item",onClick:()=>setScreen("admin")},CE("div",{className:"nav-icon"},"\uD83D\uDD10"),CE("div",{className:"nav-label"},"ADMIN"))
+    ),
+    showFlowBar&&CE("div",{style:{position:"sticky",bottom:0,background:"rgba(5,10,20,.94)",borderTop:"1px solid rgba(255,255,255,.08)",padding:"10px 20px 18px",backdropFilter:"blur(20px)",display:"flex",alignItems:"center",justifyContent:"space-between",zIndex:10}},
+      CE("button",{style:{background:"none",border:"1px solid rgba(255,255,255,.15)",borderRadius:20,padding:"7px 16px",color:"rgba(255,255,255,.6)",fontSize:12,cursor:"pointer"},onClick:()=>go("dash",0)},"Skip to Dashboard"),
+      screen!=="flow_growth"&&CE("button",{style:{background:"none",border:"none",color:"#00b4d8",fontSize:12,cursor:"pointer"},onClick:()=>go("flow_growth")},"\u2192 Phase 2 Preview")
+    )
+  );
+}
+ReactDOM.createRoot(document.getElementById("root")).render(CE(App,null));
+</script>
+</body>
+</html>
