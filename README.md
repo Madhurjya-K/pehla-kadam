@@ -63,6 +63,6 @@ This repository contains the main prototype file: `index.html`
 - `README.md` – project summary
 
 ## Team
-- Team Name-Saathi Ai
+- Team Name-Saathi AI
 - Team Members-Madhurjya Kakati & Gracy Sonwan
 
