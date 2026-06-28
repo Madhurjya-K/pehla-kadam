@@ -1,8 +1,8 @@
 
 demo link- https://madhurjya-k.github.io/pehla-kadam/
-# PEHLA KADAM 2.0
+# PEHLA KADAM 
 
-PEHLA KADAM 2.0 is an AI-powered conversational adoption and growth layer for SBI YONO.  
+PEHLA KADAM is an AI-powered conversational adoption and growth layer for SBI YONO.  
 It helps customers take their first confident financial step by guiding them in natural language, explaining recommendations, and asking for consent before any action.
 
 ## Theme Chosen
@@ -61,4 +61,8 @@ This repository contains the main prototype file: `index.html`
 ## Files
 - `index.html` – main demo prototype
 - `README.md` – project summary
+
+## Team
+- Team Name-Saathi Ai
+- Team Members-Madhurjya Kakati & Gracy Sonwan
 
